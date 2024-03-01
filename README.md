@@ -1,3 +1,4 @@
 instalar estas dependencias
-pip install faker
+pip install faker 
+'/n'
 pip install psycopg2-binary
