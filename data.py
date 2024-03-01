@@ -261,11 +261,11 @@ for _ in range(1000):
     ''', (nombre_idioma,))
 
 # Generar e insertar datos ficticios en la tabla 'idiomaNivel'
-for _ in range(6):
-    nombre_nivel = fake.random_element(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
+nivel_mapping = {'A1': 1, 'A2': 2, 'B1': 3, 'B2': 4, 'C1': 5, 'C2': 6}
+for nivel, id_nivel in nivel_mapping.items():
     cursor.execute('''
-        INSERT INTO idiomaNivel (nombre) VALUES (%s)
-    ''', (nombre_nivel,))
+        INSERT INTO idiomaNivel (id, nombre) VALUES (%s, %s)
+    ''', (id_nivel, nivel))
 
 # Generar e insertar datos ficticios en la tabla 'estudianteIdioma'
 for _ in range(1000):
