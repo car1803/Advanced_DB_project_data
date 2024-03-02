@@ -179,6 +179,8 @@ cursor.execute('''
     )
 ''')
 
+volumen = 100000
+
 # Generar e insertar datos ficticios en la tabla 'pais'
 for _ in range(200):  # Ajusta según la cantidad deseada
     nombre_pais = fake.country()
@@ -193,7 +195,7 @@ for nombre_documento in ("CC", "TI", "CE", "PA"):
     ''', (nombre_documento,))
 
 # Generar e insertar datos ficticios en la tabla 'estudiante'
-for _ in range(1000):
+for _ in range(volumen):
     nombre = fake.first_name()
     apellido = fake.last_name()
     correo = fake.email()
@@ -208,7 +210,7 @@ for _ in range(1000):
     ''', (nombre, correo, apellido, fecha_nacimiento, genero, documento, pais_id, tipo_documento_id))
 
 # Generar e insertar datos ficticios en la tabla 'tipoCarrera'
-for _ in range(1000):
+for _ in range(volumen):
     nombre_carrera = fake.job()
     cursor.execute('''
         INSERT INTO tipoCarrera (nombre) VALUES (%s)
@@ -221,7 +223,7 @@ for nombre_sede in ["Bogotá", "Medellín", "Manizales", "Palmira", "Amazonia", 
     ''', (nombre_sede,))
 
 # Generar e insertar datos ficticios en la tabla 'facultad'
-for _ in range(1000):
+for _ in range(volumen):
     nombre_facultad = fake.word()
     sede_id = fake.random_int(min=1, max=8) 
     cursor.execute('''
@@ -229,33 +231,33 @@ for _ in range(1000):
     ''', (nombre_facultad, sede_id))
 
 # Generar e insertar datos ficticios en la tabla 'departamento'
-for _ in range(1000):  
+for _ in range(volumen):  
     nombre_departamento = fake.word()
-    facultad_id = fake.random_int(min=1, max=1000) 
+    facultad_id = fake.random_int(min=1, max=volumen) 
     cursor.execute('''
         INSERT INTO departamento (nombre, facultadId) VALUES (%s, %s)
     ''', (nombre_departamento, facultad_id))
 
 # Generar e insertar datos ficticios en la tabla 'carrera'
-for _ in range(1000):  
+for _ in range(volumen):  
     nombre_carrera = fake.word()
-    tipo_carrera_id = fake.random_int(min=1, max=1000)
-    departamento_id = fake.random_int(min=1, max=1000)
+    tipo_carrera_id = fake.random_int(min=1, max=volumen)
+    departamento_id = fake.random_int(min=1, max=volumen)
     cursor.execute('''
         INSERT INTO carrera (nombre, tipoCarreraId, departamentoId) VALUES (%s, %s, %s)
     ''', (nombre_carrera, tipo_carrera_id, departamento_id))
 
 # Generar e insertar datos ficticios en la tabla 'egresado'
-for _ in range(1000):
+for _ in range(volumen):
     año_egreso = fake.random_int(min=1970, max=2024)
-    carrera_id = fake.random_int(min=1, max=1000)
-    estudiante_id = fake.random_int(min=1, max=1000)
+    carrera_id = fake.random_int(min=1, max=volumen)
+    estudiante_id = fake.random_int(min=1, max=volumen)
     cursor.execute('''
         INSERT INTO egresado (año, carreraId, estudianteId) VALUES (%s, %s, %s)
     ''', (año_egreso, carrera_id, estudiante_id))
 
 # Generar e insertar datos ficticios en la tabla 'idioma'
-for _ in range(1000):
+for _ in range(volumen):
     nombre_idioma = fake.language_name()
     cursor.execute('''
         INSERT INTO idioma (nombre) VALUES (%s)
@@ -269,16 +271,16 @@ for nivel, id_nivel in nivel_mapping.items():
     ''', (id_nivel, nivel))
 
 # Generar e insertar datos ficticios en la tabla 'estudianteIdioma'
-for _ in range(1000):
-    idioma_id = fake.random_int(min=1, max=1000)
+for _ in range(volumen):
+    idioma_id = fake.random_int(min=1, max=volumen)
     idioma_nivel_id = fake.random_int(min=1, max=6)
-    estudiante_id = fake.random_int(min=1, max=1000)
+    estudiante_id = fake.random_int(min=1, max=volumen)
     cursor.execute('''
         INSERT INTO estudianteIdioma (idiomaId, idiomaNivelId, estudianteId) VALUES (%s, %s, %s)
     ''', (idioma_id, idioma_nivel_id, estudiante_id))
 
 # Generar e insertar datos ficticios en la tabla 'institucionExterna'
-for _ in range(1000):
+for _ in range(volumen):
     nombre_institucion = fake.company()
     pais_id = fake.random_int(min=1, max=200)
     cursor.execute('''
@@ -286,18 +288,18 @@ for _ in range(1000):
     ''', (nombre_institucion, pais_id))
 
 # Generar e insertar datos ficticios en la tabla 'educacionExterna'
-for _ in range(1000):
+for _ in range(volumen):
     nombre_educacion = fake.job()
     año = fake.random_int(min=1990, max=2022)
-    institucion_externa_id = fake.random_int(min=1, max=1000)  
-    estudiante_id = fake.random_int(min=1, max=1000)  
-    tipo_carrera_id = fake.random_int(min=1, max=1000)
+    institucion_externa_id = fake.random_int(min=1, max=volumen)  
+    estudiante_id = fake.random_int(min=1, max=volumen)  
+    tipo_carrera_id = fake.random_int(min=1, max=volumen)
     cursor.execute('''
         INSERT INTO educacionExterna (nombre, año, institucionExternaId, estudianteId, tipoCarreraId) VALUES (%s, %s, %s, %s, %s)
     ''', (nombre_educacion, año, institucion_externa_id, estudiante_id, tipo_carrera_id))
 
 # Generar e insertar datos ficticios en la tabla 'sector'
-for _ in range(1000):  
+for _ in range(volumen):  
     nombre_sector = fake.word()  
     cursor.execute('''
         INSERT INTO sector (nombre) VALUES (%s)
@@ -310,38 +312,38 @@ for nombre_tipo in ['publico', 'privada']:
     ''', (nombre_tipo,))
 
 # Generar e insertar datos ficticios en la tabla 'empresa'
-for _ in range(1000): 
+for _ in range(volumen): 
     nombre_empresa = fake.company()
     correo_empresa = fake.company_email()
     web_empresa = fake.url()
     tipo_empresa_id = fake.random_int(min=1, max=2) 
-    sector_empresa_id = fake.random_int(min=1, max=1000)
+    sector_empresa_id = fake.random_int(min=1, max=volumen)
     cursor.execute('''
         INSERT INTO empresa (nombre, correo, web, tipoEmpresaId, sectorId)
         VALUES (%s, %s, %s, %s, %s)
     ''', (nombre_empresa, correo_empresa, web_empresa, tipo_empresa_id, sector_empresa_id))
 
 # Generar e insertar datos ficticios en la tabla 'trabajoEstudiante'
-for _ in range(1000):
+for _ in range(volumen):
     fecha_inicio = fake.date_this_decade()
     fecha_fin = fake.date_this_decade()
     while fecha_fin <= fecha_inicio:
         fecha_fin = fake.date_this_decade()
-    orden = fake.random_int(min=1, max=1000)
+    orden = fake.random_int(min=1, max=volumen)
     cargo = fake.job()
     años_experiencia_previa = fake.random_int(min=0, max=10)
     oferta_sie = fake.boolean()
-    estudiante_id = fake.random_int(min=1, max=1000) 
-    empresa_id = fake.random_int(min=1, max=1000)
+    estudiante_id = fake.random_int(min=1, max=volumen) 
+    empresa_id = fake.random_int(min=1, max=volumen)
     cursor.execute('''
         INSERT INTO trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     ''', (fecha_inicio, fecha_fin, orden, cargo, años_experiencia_previa, oferta_sie, estudiante_id, empresa_id))
 
 # Generar e insertar datos ficticios en la tabla 'trabajoEstudianteSalario'
-for _ in range(1000):
+for _ in range(volumen):
     salario = fake.random_float(min=1000000, max=5000000)
-    trabajoEstudianteId = fake.random_int(min=1, max=1000) 
+    trabajoEstudianteId = fake.random_int(min=1, max=volumen) 
     cursor.execute('''
         INSERT INTO trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES (%s, %s)
     ''', (salario, trabajoEstudianteId))
