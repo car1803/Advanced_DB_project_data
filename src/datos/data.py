@@ -32,7 +32,7 @@ def populate_tables(schema="testmodel"):
     print("Datos insertados en la tabla 'idiomaNivel'.")
 
     # Insertar datos específicos en la tabla 'sede'
-    taskInsert(taskSede, 7, connection, cursor, 7)
+    taskInsert(taskSede, 9, connection, cursor, 8)
     print("Datos insertados en la tabla 'sede'.")
 
     # Generar e insertar datos ficticios en la tabla 'institucionExterna'
