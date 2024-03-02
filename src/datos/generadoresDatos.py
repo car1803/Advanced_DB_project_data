@@ -35,7 +35,7 @@ def taskTipoCarrera(___, __):
         INSERT INTO {schema}.tipoCarrera (nombre) VALUES ('{nombre_carrera}');
     '''.format(schema=schema, nombre_carrera=nombre_carrera.replace("'", "''"))
 
-def taskSede(i):
+def taskSede(i,__):
     nombre_sede = ("Bogotá", "Medellín", "Manizales", "Palmira", "Amazonia", "Caribe", "Orinoquia", "Tumaco")[i % 8]
     return f'''
         INSERT INTO {schema}.sede (nombre) VALUES ('{nombre_sede}');
