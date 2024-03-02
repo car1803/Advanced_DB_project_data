@@ -4,7 +4,7 @@ from src.connectors.postgresqlcredenciales import schema
 from src.datos.generadoresDatos import taskEstudianteIdioma, taskInstitucionExterna, taskCarrera, taskDepartamento, taskFacultad, taskEgresado,taskInstitucionExterna, taskPais,taskIdioma, taskIdiomaNivel, taskDocumento, taskEstudiante, taskTipoCarrera, taskSede, taskEducacionExterna, taskSector, taskTipoEmpresa, taskEmpresa, taskTrabajoEstudiante, taskTrabajoEstudianteSalario
 
 cursor = connection.cursor()
-volumen = 100000
+volumen = 100001
 
 def populate_tables(schema="testmodel"):
     print("Generando e insertando datos ficticios en las tablas...")
@@ -27,13 +27,17 @@ def populate_tables(schema="testmodel"):
     taskInsert(taskIdioma, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'idioma'.")
 
-        # Generar e insertar datos ficticios en la tabla 'idiomaNivel'
-    taskInsert(taskIdiomaNivel, 6, connection, cursor, 6)
+    # Generar e insertar datos ficticios en la tabla 'idiomaNivel'
+    taskInsert(taskIdiomaNivel, 1, connection, cursor, 1)
     print("Datos insertados en la tabla 'idiomaNivel'.")
 
     # Insertar datos específicos en la tabla 'sede'
     taskInsert(taskSede, 7, connection, cursor, 7)
     print("Datos insertados en la tabla 'sede'.")
+
+    # Generar e insertar datos ficticios en la tabla 'institucionExterna'
+    taskInsert(taskInstitucionExterna, volumen, connection, cursor, 1000)
+    print("Datos insertados en la tabla 'institucionExterna'.")
 
     # Generar e insertar datos ficticios en la tabla 'educacionExterna'
     taskInsert(taskEducacionExterna, volumen, connection, cursor, 1000)
@@ -78,10 +82,6 @@ def populate_tables(schema="testmodel"):
     # Generar e insertar datos ficticios en la tabla 'estudianteIdioma'
     taskInsert(taskEstudianteIdioma, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'estudianteIdioma'.")
-
-    # Generar e insertar datos ficticios en la tabla 'institucionExterna'
-    taskInsert(taskInstitucionExterna, volumen, connection, cursor, 1000)
-    print("Datos insertados en la tabla 'institucionExterna'.")
 
     # Confirmar los cambios y cerrar la conexión
     connection.commit()

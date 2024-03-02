@@ -47,10 +47,10 @@ def taskEducacionExterna(___, volumen):
     institucion_externa_id = fake.random_int(min=1, max=volumen)  
     estudiante_id = fake.random_int(min=1, max=volumen)  
     tipo_carrera_id = fake.random_int(min=1, max=volumen)
-    return f'''
+    return '''
         INSERT INTO {schema}.educacionExterna (nombre, año, institucionExternaId, estudianteId, tipoCarreraId)
         VALUES ('{nombre_educacion}', {año}, {institucion_externa_id}, {estudiante_id}, {tipo_carrera_id});
-    '''
+    '''.format(schema=schema, año=año,estudiante_id=estudiante_id, tipo_carrera_id=tipo_carrera_id, nombre_educacion=nombre_educacion.replace("'", "''"),institucion_externa_id=institucion_externa_id)
 
 def taskSector(___, __):
     nombre_sector = fake.word()  
@@ -115,14 +115,14 @@ def taskFacultad(___, __):
     nombre_facultad = fake.word()
     sede_id = fake.random_int(min=1, max=8) 
     return f'''
-        INSERT INTO facultad (nombre, sedeId) VALUES ('{nombre_facultad}', {sede_id});
+        INSERT INTO {schema}.facultad (nombre, sedeId) VALUES ('{nombre_facultad}', {sede_id});
     '''
 
 def taskDepartamento(___, volumen):
     nombre_departamento = fake.word()
     facultad_id = fake.random_int(min=1, max=volumen) 
     return f'''
-        INSERT INTO departamento (nombre, facultadId) VALUES ('{nombre_departamento}', {facultad_id});
+        INSERT INTO {schema}.departamento (nombre, facultadId) VALUES ('{nombre_departamento}', {facultad_id});
     '''
 
 def taskCarrera(___, volumen):
@@ -130,7 +130,7 @@ def taskCarrera(___, volumen):
     tipo_carrera_id = fake.random_int(min=1, max=volumen)
     departamento_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO carrera (nombre, tipoCarreraId, departamentoId) VALUES ('{nombre_carrera}', {tipo_carrera_id}, {departamento_id});
+        INSERT INTO {schema}.carrera (nombre, tipoCarreraId, departamentoId) VALUES ('{nombre_carrera}', {tipo_carrera_id}, {departamento_id});
     '''
 
 def taskEgresado(___, volumen):
@@ -138,20 +138,21 @@ def taskEgresado(___, volumen):
     carrera_id = fake.random_int(min=1, max=volumen)
     estudiante_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO egresado (año, carreraId, estudianteId) VALUES ({año_egreso}, {carrera_id}, {estudiante_id});
+        INSERT INTO {schema}.egresado (año, carreraId, estudianteId) VALUES ({año_egreso}, {carrera_id}, {estudiante_id});
     '''
 
 def taskIdioma(___, __):
     nombre_idioma = fake.language_name()
     return f'''
-        INSERT INTO idioma (nombre) VALUES ('{nombre_idioma}');
+        INSERT INTO {schema}.idioma (nombre) VALUES ('{nombre_idioma}');
     '''
 
 def taskIdiomaNivel(___, __):
+    print("Generando e insertando datos ficticios en la tabla 'idiomaNivel'...")
     nivel_mapping = {'A1': 1, 'A2': 2, 'B1': 3, 'B2': 4, 'C1': 5, 'C2': 6}
     queries = []
     for nivel, id_nivel in nivel_mapping.items():
-        queries.append(f"INSERT INTO idiomaNivel (id, nombre) VALUES ({id_nivel}, '{nivel}');")
+        queries.append(f"INSERT INTO {schema}.idiomaNivel (id, nombre) VALUES ({id_nivel}, '{nivel}');")
     return '\n'.join(queries)
 
 def taskEstudianteIdioma(___, volumen):
@@ -159,26 +160,26 @@ def taskEstudianteIdioma(___, volumen):
     idioma_nivel_id = fake.random_int(min=1, max=6)
     estudiante_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO estudianteIdioma (idiomaId, idiomaNivelId, estudianteId) VALUES ({idioma_id}, {idioma_nivel_id}, {estudiante_id});
+        INSERT INTO {schema}.estudianteIdioma (idiomaId, idiomaNivelId, estudianteId) VALUES ({idioma_id}, {idioma_nivel_id}, {estudiante_id});
     '''
 
 def taskInstitucionExterna(___, __):
     nombre_institucion = fake.company()
     pais_id = fake.random_int(min=1, max=200)
     return f'''
-        INSERT INTO institucionExterna (nombre, paisId) VALUES ('{nombre_institucion}', {pais_id});
+        INSERT INTO {schema}.institucionExterna (nombre, paisId) VALUES ('{nombre_institucion}', {pais_id});
     '''
 
 def taskSector(___, __):
     nombre_sector = fake.word()  
     return f'''
-        INSERT INTO sector (nombre) VALUES ('{nombre_sector}');
+        INSERT INTO {schema}.sector (nombre) VALUES ('{nombre_sector}');
     '''
 
 def taskTipoEmpresa(___, __):
     for nombre_tipo in ['publico', 'privada']:
         return f'''
-            INSERT INTO tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
+            INSERT INTO {schema}.tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
         '''
 
 def taskEmpresa(___, volumen):
@@ -188,7 +189,7 @@ def taskEmpresa(___, volumen):
     tipo_empresa_id = fake.random_int(min=1, max=2) 
     sector_empresa_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO empresa (nombre, correo, web, tipoEmpresaId, sectorId)
+        INSERT INTO {schema}.empresa (nombre, correo, web, tipoEmpresaId, sectorId)
         VALUES ('{nombre_empresa}', '{correo_empresa}', '{web_empresa}', {tipo_empresa_id}, {sector_empresa_id});
     '''
 
@@ -204,7 +205,7 @@ def taskTrabajoEstudiante(___, volumen):
     estudiante_id = fake.random_int(min=1, max=volumen) 
     empresa_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
+        INSERT INTO {schema}.trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
         VALUES ('{fecha_inicio}', '{fecha_fin}', {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
     '''
 
@@ -212,5 +213,5 @@ def taskTrabajoEstudianteSalario(___, volumen):
     salario = fake.random_float(min=1000000, max=5000000)
     trabajoEstudianteId = fake.random_int(min=1, max=volumen) 
     return f'''
-        INSERT INTO trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES ({salario}, {trabajoEstudianteId});
+        INSERT INTO {schema}.trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES ({salario}, {trabajoEstudianteId});
     '''

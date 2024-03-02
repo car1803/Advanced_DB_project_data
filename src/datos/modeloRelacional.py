@@ -120,7 +120,7 @@ def create_tables(schema="testmodel"):
             idiomaId INTEGER NOT NULL,
             idiomaNivelId INTEGER NOT NULL,
             estudianteId INTEGER NOT NULL,
-            FOREIGN KEY (idiomaId) REFERENCES idioma(id),
+            FOREIGN KEY (idiomaId) REFERENCES {schema}.idioma(id),
             FOREIGN KEY (idiomaNivelId) REFERENCES {schema}.idiomaNivel(id),
             FOREIGN KEY (estudianteId) REFERENCES {schema}.estudiante(id)
         )
