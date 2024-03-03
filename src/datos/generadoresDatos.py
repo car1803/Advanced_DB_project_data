@@ -178,11 +178,18 @@ def taskEmpresa(___, volumen):
     '''
 
 def taskTrabajoEstudiante(___, volumen):
+    random_number = random.random()
+    probabilidad_ejecucion = 0.5
     fecha_inicio = fake.date_this_decade()
-    fecha_fin = fake.date_this_decade()
-    while fecha_fin <= fecha_inicio:
-        fecha_inicio = fake.date_this_decade()
+    if random_number < probabilidad_ejecucion:
         fecha_fin = fake.date_this_decade()
+        while fecha_fin <= fecha_inicio:
+            fecha_inicio = fake.date_this_decade()
+            fecha_fin = fake.date_this_decade()
+        fecha_fin = f"'{fecha_fin}'"
+    else:   
+        fecha_fin = "NULL"
+
     orden = fake.random_int(min=1, max=volumen)
     cargo = fake.job()
     años_experiencia_previa = fake.random_int(min=0, max=10)
@@ -191,5 +198,5 @@ def taskTrabajoEstudiante(___, volumen):
     empresa_id = fake.random_int(min=1, max=volumen)
     return '''
         INSERT INTO trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
-        VALUES ('{fecha_inicio}', '{fecha_fin}', {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
+        VALUES ('{fecha_inicio}', {fecha_fin}, {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
     '''.format(fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, orden=orden, cargo=cargo.replace("'", "''"), años_experiencia_previa=años_experiencia_previa, oferta_sie=oferta_sie, estudiante_id=estudiante_id, empresa_id=empresa_id)

@@ -5,13 +5,14 @@ SELECT fechaInicio, EXTRACT(year FROM fechaInicio), EXTRACT(month FROM fechaInic
 FROM esquemarelacional.trabajoEstudiante t
 WHERE NOT EXISTS (
     SELECT 1 FROM esquemadimensional.dTiempo WHERE fecha = t.fechaInicio
-)
+) AND fechaInicio IS NOT NULL
 UNION
 SELECT fechaFin, EXTRACT(year FROM fechaFin), EXTRACT(month FROM fechaFin), EXTRACT(day FROM fechaFin)
 FROM esquemarelacional.trabajoEstudiante t
 WHERE NOT EXISTS (
     SELECT 1 FROM esquemadimensional.dTiempo WHERE fecha = t.fechaFin
-);
+) AND fechaFin IS NOT NULL;
+
 
 INSERT INTO esquemadimensional.dEstudiante (id, nombre, correo, apellido, fechaNacimiento, genero, documento, nombrePais, nombreTipoDocumento)
 SELECT esquemarelacional.estudiante.id, esquemarelacional.estudiante.nombre, esquemarelacional.estudiante.correo, esquemarelacional.estudiante.apellido, esquemarelacional.estudiante.fechaNacimiento, esquemarelacional.estudiante.genero, esquemarelacional.estudiante.documento, esquemarelacional.pais.nombre AS nombrePais, esquemarelacional.tipoDocumento.nombre AS nombreTipoDocumento
@@ -108,20 +109,20 @@ FROM (
 WHERE h.id = subquery.id;
 
 INSERT INTO esquemadimensional.dEmpresaCarrera (empresaId, carreraId)
-SELECT he.id, ee.carreraId
+select distinct he.id, ee.carreraId
 FROM esquemadimensional.hEmpresa he 
 JOIN esquemarelacional.trabajoEstudiante te ON te.empresaId = he.id
 JOIN esquemarelacional.estudiante e ON e.id = te.estudianteid 
 JOIN esquemarelacional.egresado ee ON ee.estudianteId = e.id;
 
 INSERT INTO esquemadimensional.dEstudianteIdiomaEmpresa (estudianteIdiomaId, empresaId)
-SELECT hei.id, te.empresaId
+SELECT distinct hei.id, te.empresaId
 FROM esquemadimensional.hEstudianteIdioma hei
 JOIN esquemarelacional.estudiante e ON e.id = hei.estudianteId 
 JOIN esquemarelacional.trabajoEstudiante te on te.estudianteId = e.id;
 
 INSERT INTO esquemadimensional.dEstudianteIdiomaCarrera (estudianteIdiomaId, carreraId)
-SELECT hei.id, ee.carreraId
+SELECT distinct hei.id, ee.carreraId
 FROM esquemadimensional.hEstudianteIdioma hei
 JOIN esquemarelacional.estudiante e ON e.id = hei.estudianteId 
 JOIN esquemarelacional.egresado ee ON ee.estudianteId = e.id;
