@@ -1,4 +1,5 @@
 from faker import Faker
+import random
 from src.connectors.postgresqlcredenciales import schema
 
 fake = Faker()
@@ -75,24 +76,8 @@ def taskEmpresa(___, volumen):
         VALUES ('{nombre_empresa}', '{correo_empresa}', '{web_empresa}', {tipo_empresa_id}, {sector_empresa_id});
     '''
 
-def taskTrabajoEstudiante(___, volumen):
-    fecha_inicio = fake.date_this_decade()
-    fecha_fin = fake.date_this_decade()
-    while fecha_fin <= fecha_inicio:
-        fecha_fin = fake.date_this_decade()
-    orden = fake.random_int(min=1, max=volumen)
-    cargo = fake.job()
-    años_experiencia_previa = fake.random_int(min=0, max=10)
-    oferta_sie = fake.boolean()
-    estudiante_id = fake.random_int(min=1, max=volumen) 
-    empresa_id = fake.random_int(min=1, max=volumen)
-    return f'''
-        INSERT INTO {schema}.trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
-        VALUES ('{fecha_inicio}', '{fecha_fin}', {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
-    '''
-
 def taskTrabajoEstudianteSalario(___, volumen):
-    salario = fake.random_float(min=1000000, max=5000000)
+    salario  = random.uniform(1000000, 5000000)
     trabajoEstudianteId = fake.random_int(min=1, max=volumen) 
     return f'''
         INSERT INTO {schema}.trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES ({salario}, {trabajoEstudianteId});
@@ -197,6 +182,7 @@ def taskTrabajoEstudiante(___, volumen):
     fecha_inicio = fake.date_this_decade()
     fecha_fin = fake.date_this_decade()
     while fecha_fin <= fecha_inicio:
+        fecha_inicio = fake.date_this_decade()
         fecha_fin = fake.date_this_decade()
     orden = fake.random_int(min=1, max=volumen)
     cargo = fake.job()
@@ -204,14 +190,7 @@ def taskTrabajoEstudiante(___, volumen):
     oferta_sie = fake.boolean()
     estudiante_id = fake.random_int(min=1, max=volumen) 
     empresa_id = fake.random_int(min=1, max=volumen)
-    return f'''
+    return '''
         INSERT INTO {schema}.trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
         VALUES ('{fecha_inicio}', '{fecha_fin}', {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
-    '''
-
-def taskTrabajoEstudianteSalario(___, volumen):
-    salario = fake.random_float(min=1000000, max=5000000)
-    trabajoEstudianteId = fake.random_int(min=1, max=volumen) 
-    return f'''
-        INSERT INTO {schema}.trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES ({salario}, {trabajoEstudianteId});
-    '''
+    '''.format(schema=schema, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, orden=orden, cargo=cargo.replace("'", "''"), años_experiencia_previa=años_experiencia_previa, oferta_sie=oferta_sie, estudiante_id=estudiante_id, empresa_id=empresa_id)

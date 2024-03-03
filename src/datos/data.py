@@ -4,84 +4,86 @@ from src.connectors.postgresqlcredenciales import schema
 from src.datos.generadoresDatos import taskEstudianteIdioma, taskInstitucionExterna, taskCarrera, taskDepartamento, taskFacultad, taskEgresado,taskInstitucionExterna, taskPais,taskIdioma, taskIdiomaNivel, taskDocumento, taskEstudiante, taskTipoCarrera, taskSede, taskEducacionExterna, taskSector, taskTipoEmpresa, taskEmpresa, taskTrabajoEstudiante, taskTrabajoEstudianteSalario
 
 cursor = connection.cursor()
-volumen = 100001
+volumen = 100000 + 1 #Esto es porque se usa mod para saber cuando hacer commit
+factor = 1000 
 
-def populate_tables(schema="testmodel"):
+def populate_tables():
     print("Generando e insertando datos ficticios en las tablas...")
 
     # Generar e insertar datos ficticios en la tabla 'pais'
-    taskInsert(taskPais, 201, connection,cursor, 200)
     print("Datos insertados en la tabla 'pais'.")
+    taskInsert(taskPais, 201, connection,cursor, 200)
 
     # Generar e insertar datos ficticios en la tabla 'tipoDocumento'
-    taskInsert(taskDocumento, 4, connection, cursor, 1)
     print("Datos insertados en la tabla 'pais'.")
+    taskInsert(taskDocumento, 4, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'estudiante'
-    taskInsert(taskEstudiante, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'estudiante'.")
+    taskInsert(taskEstudiante, volumen, connection, cursor, factor)
 
-    taskInsert(taskTipoCarrera, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'tipoCarrera'.")
+    taskInsert(taskTipoCarrera, volumen, connection, cursor, factor)
     
-    taskInsert(taskIdioma, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'idioma'.")
+    taskInsert(taskIdioma, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'idiomaNivel'
-    taskInsert(taskIdiomaNivel, 1, connection, cursor, 1)
     print("Datos insertados en la tabla 'idiomaNivel'.")
+    taskInsert(taskIdiomaNivel, 1, connection, cursor, 1)
 
     # Insertar datos específicos en la tabla 'sede'
-    taskInsert(taskSede, 9, connection, cursor, 8)
     print("Datos insertados en la tabla 'sede'.")
+    taskInsert(taskSede, 9, connection, cursor, 8)
 
     # Generar e insertar datos ficticios en la tabla 'institucionExterna'
-    taskInsert(taskInstitucionExterna, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'institucionExterna'.")
+    taskInsert(taskInstitucionExterna, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'educacionExterna'
-    taskInsert(taskEducacionExterna, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'educacionExterna'.")
+    taskInsert(taskEducacionExterna, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'sector'
-    taskInsert(taskSector, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'sector'.")
+    taskInsert(taskSector, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'tipoEmpresa'
-    taskInsert(taskTipoEmpresa, 2, connection, cursor, 1)
     print("Datos insertados en la tabla 'tipoEmpresa'.")
+    taskInsert(taskTipoEmpresa, 2, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'empresa'
-    taskInsert(taskEmpresa, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'empresa'.")
+    taskInsert(taskEmpresa, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'trabajoEstudiante'
-    taskInsert(taskTrabajoEstudiante, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'trabajoEstudiante'.")
+    taskInsert(taskTrabajoEstudiante, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'trabajoEstudianteSalario'
-    taskInsert(taskTrabajoEstudianteSalario, volumen, connection, cursor, 1000)
+    taskInsert(taskTrabajoEstudianteSalario, volumen, connection, cursor, factor)
     print("Datos insertados en la tabla 'trabajoEstudianteSalario'.")
 
     # Generar e insertar datos ficticios en la tabla 'facultad'
-    taskInsert(taskFacultad, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'facultad'.")
+    taskInsert(taskFacultad, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'departamento'
-    taskInsert(taskDepartamento, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'departamento'.")
+    taskInsert(taskDepartamento, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'carrera'
-    taskInsert(taskCarrera, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'carrera'.")
+    taskInsert(taskCarrera, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'egresado'
-    taskInsert(taskEgresado, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'egresado'.")
+    taskInsert(taskEgresado, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'estudianteIdioma'
-    taskInsert(taskEstudianteIdioma, volumen, connection, cursor, 1000)
     print("Datos insertados en la tabla 'estudianteIdioma'.")
+    taskInsert(taskEstudianteIdioma, volumen, connection, cursor, factor)
 
     # Confirmar los cambios y cerrar la conexión
     connection.commit()
+    print("Datos insertados en todas las tablas.")

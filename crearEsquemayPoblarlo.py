@@ -7,6 +7,6 @@ from src.connectors.postgresqlcredenciales import schema
 drop_schema(schema)
 create_schema(schema)
 create_tables(schema)
-populate_tables(schema)
+populate_tables()
 
 connection.close()
