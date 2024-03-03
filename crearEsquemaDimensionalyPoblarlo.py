@@ -1,4 +1,4 @@
-from src.datos.modeloRelacional import execute_script, create_schema, drop_schema, set_schema
+from src.datos.modeloRelacional import execute_script, execute_script_by_steps, create_schema, drop_schema, set_schema
 from src.connectors.connection import connection
 
 esquemadimesional = "esquemaDimensional"
@@ -10,6 +10,6 @@ create_schema(esquemadimesional)
 set_schema(esquemadimesional)
 execute_script(nombremodelo)
 set_schema("public")
-execute_script(etl)
+execute_script_by_steps(etl)
 
 connection.close()

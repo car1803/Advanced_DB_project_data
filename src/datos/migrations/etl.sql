@@ -53,6 +53,15 @@ SELECT id, nombre FROM  esquemarelacional.sector;
 INSERT INTO esquemadimensional.dTipoEmpresa (id, nombre)
 SELECT id, nombre FROM  esquemarelacional.tipoEmpresa;
 
+INSERT INTO esquemadimensional.dIdioma (id, nombre)
+SELECT id, nombre FROM  esquemarelacional.idioma;
+
+INSERT INTO esquemadimensional.dIdiomaNivel (id, nombre)
+SELECT id, nombre FROM  esquemarelacional.idiomaNivel;
+
+INSERT INTO esquemadimensional.hEstudianteIdioma (idiomaId, idiomaNivelId, estudianteId)
+SELECT idiomaId, idiomaNivelId, estudianteId FROM esquemarelacional.estudianteIdioma;
+
 INSERT INTO esquemadimensional.hEmpresa (id, nombre, correo, web, tipoEmpresaId, sectorId, gastoEnSalariosTotal, numeroDeEmpleadosTotal, numerodeEmpleadosActual)
 SELECT 
 	e.id,
@@ -87,15 +96,6 @@ FROM esquemadimensional.hEmpresa he
 JOIN esquemarelacional.trabajoEstudiante te ON te.empresaId = he.id
 JOIN esquemarelacional.estudiante e ON e.id = te.estudianteid 
 JOIN esquemarelacional.egresado ee ON ee.estudianteId = e.id;
-
-INSERT INTO esquemadimensional.dIdioma (id, nombre)
-SELECT id, nombre FROM  esquemarelacional.idioma;
-
-INSERT INTO esquemadimensional.dIdiomaNivel (id, nombre)
-SELECT id, nombre FROM  esquemarelacional.idiomaNivel;
-
-INSERT INTO esquemadimensional.hEstudianteIdioma (idiomaId, idiomaNivelId, estudianteId)
-SELECT idiomaId, idiomaNivelId, estudianteId FROM estudianteIdioma;
 
 INSERT INTO esquemadimensional.dEstudianteIdiomaEmpresa (estudianteIdiomaId, empresaId)
 SELECT hei.id, te.empresaId
