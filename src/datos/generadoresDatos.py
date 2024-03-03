@@ -1,19 +1,18 @@
 from faker import Faker
 import random
-from src.connectors.postgresqlcredenciales import schema
 
 fake = Faker()
 
 def taskPais(___, __):
     nombre_pais = fake.country()
     return '''
-        INSERT INTO {schema}.pais (nombre) VALUES ('{nombre_pais}');
-    '''.format(schema=schema, nombre_pais=nombre_pais.replace("'", "''"))
+        INSERT INTO pais (nombre) VALUES ('{nombre_pais}');
+    '''.format(nombre_pais=nombre_pais.replace("'", "''"))
 
 def taskDocumento(i,_):
     nombre_documento = ('CC', 'TI', 'CE', 'PA')[i % 4]
     return f'''
-        INSERT INTO {schema}.tipoDocumento (nombre) VALUES ('{nombre_documento}');
+        INSERT INTO tipoDocumento (nombre) VALUES ('{nombre_documento}');
     '''
 
 def taskEstudiante(___, __):
@@ -26,20 +25,20 @@ def taskEstudiante(___, __):
     pais_id = fake.random_int(min=1, max=200) 
     tipo_documento_id = fake.random_int(min=1, max=4) 
     return f'''
-        INSERT INTO {schema}.estudiante (nombre, correo, apellido, fechaNacimiento, genero, documento, paisId, tipoDocumentoId) 
+        INSERT INTO estudiante (nombre, correo, apellido, fechaNacimiento, genero, documento, paisId, tipoDocumentoId) 
         VALUES ('{nombre}', '{correo}', '{apellido}', '{fecha_nacimiento}', '{genero}', {documento}, {pais_id}, {tipo_documento_id});
     '''
 
 def taskTipoCarrera(___, __):
     nombre_carrera = fake.job()
     return '''
-        INSERT INTO {schema}.tipoCarrera (nombre) VALUES ('{nombre_carrera}');
-    '''.format(schema=schema, nombre_carrera=nombre_carrera.replace("'", "''"))
+        INSERT INTO tipoCarrera (nombre) VALUES ('{nombre_carrera}');
+    '''.format(nombre_carrera=nombre_carrera.replace("'", "''"))
 
 def taskSede(i,__):
     nombre_sede = ("Bogotá", "Medellín", "Manizales", "Palmira", "Amazonia", "Caribe", "Orinoquia", "Tumaco")[i % 8]
     return f'''
-        INSERT INTO {schema}.sede (nombre) VALUES ('{nombre_sede}');
+        INSERT INTO sede (nombre) VALUES ('{nombre_sede}');
     '''
 
 def taskEducacionExterna(___, volumen):
@@ -49,20 +48,20 @@ def taskEducacionExterna(___, volumen):
     estudiante_id = fake.random_int(min=1, max=volumen)  
     tipo_carrera_id = fake.random_int(min=1, max=volumen)
     return '''
-        INSERT INTO {schema}.educacionExterna (nombre, año, institucionExternaId, estudianteId, tipoCarreraId)
+        INSERT INTO educacionExterna (nombre, año, institucionExternaId, estudianteId, tipoCarreraId)
         VALUES ('{nombre_educacion}', {año}, {institucion_externa_id}, {estudiante_id}, {tipo_carrera_id});
-    '''.format(schema=schema, año=año,estudiante_id=estudiante_id, tipo_carrera_id=tipo_carrera_id, nombre_educacion=nombre_educacion.replace("'", "''"),institucion_externa_id=institucion_externa_id)
+    '''.format(año=año,estudiante_id=estudiante_id, tipo_carrera_id=tipo_carrera_id, nombre_educacion=nombre_educacion.replace("'", "''"),institucion_externa_id=institucion_externa_id)
 
 def taskSector(___, __):
     nombre_sector = fake.word()  
     return '''
-        INSERT INTO {schema}.sector (nombre) VALUES ('{nombre_sector}');
-    '''.format(schema=schema, nombre_sector=nombre_sector.replace("'", "''"))
+        INSERT INTO sector (nombre) VALUES ('{nombre_sector}');
+    '''.format(nombre_sector=nombre_sector.replace("'", "''"))
 
 def taskTipoEmpresa(i,_):
     for nombre_tipo in ('publico', 'privada')[i % 2]:
         return f'''
-            INSERT INTO {schema}.tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
+            INSERT INTO tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
         '''
 
 def taskEmpresa(___, volumen):
@@ -72,7 +71,7 @@ def taskEmpresa(___, volumen):
     tipo_empresa_id = fake.random_int(min=1, max=2) 
     sector_empresa_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO {schema}.empresa (nombre, correo, web, tipoEmpresaId, sectorId)
+        INSERT INTO empresa (nombre, correo, web, tipoEmpresaId, sectorId)
         VALUES ('{nombre_empresa}', '{correo_empresa}', '{web_empresa}', {tipo_empresa_id}, {sector_empresa_id});
     '''
 
@@ -80,34 +79,34 @@ def taskTrabajoEstudianteSalario(___, volumen):
     salario  = random.uniform(1000000, 5000000)
     trabajoEstudianteId = fake.random_int(min=1, max=volumen) 
     return f'''
-        INSERT INTO {schema}.trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES ({salario}, {trabajoEstudianteId});
+        INSERT INTO trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES ({salario}, {trabajoEstudianteId});
     '''
 
 def taskIdioma(___, __):
     nombre_idioma = fake.language_name()
     return f'''
-        INSERT INTO {schema}.idioma (nombre) VALUES ('{nombre_idioma}');
+        INSERT INTO idioma (nombre) VALUES ('{nombre_idioma}');
     '''
 
 def taskIdiomaNivel(___,__):
     nivel_mapping = {'A1': 1, 'A2': 2, 'B1': 3, 'B2': 4, 'C1': 5, 'C2': 6}
     queries = []
     for nivel, id_nivel in nivel_mapping.items():
-        queries.append(f"INSERT INTO {schema}.idiomaNivel (id, nombre) VALUES ({id_nivel}, '{nivel}');")
+        queries.append(f"INSERT INTO idiomaNivel (id, nombre) VALUES ({id_nivel}, '{nivel}');")
     return '\n'.join(queries)
 
 def taskFacultad(___, __):
     nombre_facultad = fake.word()
     sede_id = fake.random_int(min=1, max=8) 
     return f'''
-        INSERT INTO {schema}.facultad (nombre, sedeId) VALUES ('{nombre_facultad}', {sede_id});
+        INSERT INTO facultad (nombre, sedeId) VALUES ('{nombre_facultad}', {sede_id});
     '''
 
 def taskDepartamento(___, volumen):
     nombre_departamento = fake.word()
     facultad_id = fake.random_int(min=1, max=volumen) 
     return f'''
-        INSERT INTO {schema}.departamento (nombre, facultadId) VALUES ('{nombre_departamento}', {facultad_id});
+        INSERT INTO departamento (nombre, facultadId) VALUES ('{nombre_departamento}', {facultad_id});
     '''
 
 def taskCarrera(___, volumen):
@@ -115,7 +114,7 @@ def taskCarrera(___, volumen):
     tipo_carrera_id = fake.random_int(min=1, max=volumen)
     departamento_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO {schema}.carrera (nombre, tipoCarreraId, departamentoId) VALUES ('{nombre_carrera}', {tipo_carrera_id}, {departamento_id});
+        INSERT INTO carrera (nombre, tipoCarreraId, departamentoId) VALUES ('{nombre_carrera}', {tipo_carrera_id}, {departamento_id});
     '''
 
 def taskEgresado(___, volumen):
@@ -123,13 +122,13 @@ def taskEgresado(___, volumen):
     carrera_id = fake.random_int(min=1, max=volumen)
     estudiante_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO {schema}.egresado (año, carreraId, estudianteId) VALUES ({año_egreso}, {carrera_id}, {estudiante_id});
+        INSERT INTO egresado (año, carreraId, estudianteId) VALUES ({año_egreso}, {carrera_id}, {estudiante_id});
     '''
 
 def taskIdioma(___, __):
     nombre_idioma = fake.language_name()
     return f'''
-        INSERT INTO {schema}.idioma (nombre) VALUES ('{nombre_idioma}');
+        INSERT INTO idioma (nombre) VALUES ('{nombre_idioma}');
     '''
 
 def taskIdiomaNivel(___, __):
@@ -137,7 +136,7 @@ def taskIdiomaNivel(___, __):
     nivel_mapping = {'A1': 1, 'A2': 2, 'B1': 3, 'B2': 4, 'C1': 5, 'C2': 6}
     queries = []
     for nivel, id_nivel in nivel_mapping.items():
-        queries.append(f"INSERT INTO {schema}.idiomaNivel (id, nombre) VALUES ({id_nivel}, '{nivel}');")
+        queries.append(f"INSERT INTO idiomaNivel (id, nombre) VALUES ({id_nivel}, '{nivel}');")
     return '\n'.join(queries)
 
 def taskEstudianteIdioma(___, volumen):
@@ -145,26 +144,26 @@ def taskEstudianteIdioma(___, volumen):
     idioma_nivel_id = fake.random_int(min=1, max=6)
     estudiante_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO {schema}.estudianteIdioma (idiomaId, idiomaNivelId, estudianteId) VALUES ({idioma_id}, {idioma_nivel_id}, {estudiante_id});
+        INSERT INTO estudianteIdioma (idiomaId, idiomaNivelId, estudianteId) VALUES ({idioma_id}, {idioma_nivel_id}, {estudiante_id});
     '''
 
 def taskInstitucionExterna(___, __):
     nombre_institucion = fake.company()
     pais_id = fake.random_int(min=1, max=200)
     return f'''
-        INSERT INTO {schema}.institucionExterna (nombre, paisId) VALUES ('{nombre_institucion}', {pais_id});
+        INSERT INTO institucionExterna (nombre, paisId) VALUES ('{nombre_institucion}', {pais_id});
     '''
 
 def taskSector(___, __):
     nombre_sector = fake.word()  
     return f'''
-        INSERT INTO {schema}.sector (nombre) VALUES ('{nombre_sector}');
+        INSERT INTO sector (nombre) VALUES ('{nombre_sector}');
     '''
 
 def taskTipoEmpresa(___, __):
     for nombre_tipo in ['publico', 'privada']:
         return f'''
-            INSERT INTO {schema}.tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
+            INSERT INTO tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
         '''
 
 def taskEmpresa(___, volumen):
@@ -174,7 +173,7 @@ def taskEmpresa(___, volumen):
     tipo_empresa_id = fake.random_int(min=1, max=2) 
     sector_empresa_id = fake.random_int(min=1, max=volumen)
     return f'''
-        INSERT INTO {schema}.empresa (nombre, correo, web, tipoEmpresaId, sectorId)
+        INSERT INTO empresa (nombre, correo, web, tipoEmpresaId, sectorId)
         VALUES ('{nombre_empresa}', '{correo_empresa}', '{web_empresa}', {tipo_empresa_id}, {sector_empresa_id});
     '''
 
@@ -191,6 +190,6 @@ def taskTrabajoEstudiante(___, volumen):
     estudiante_id = fake.random_int(min=1, max=volumen) 
     empresa_id = fake.random_int(min=1, max=volumen)
     return '''
-        INSERT INTO {schema}.trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
+        INSERT INTO trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
         VALUES ('{fecha_inicio}', '{fecha_fin}', {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
-    '''.format(schema=schema, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, orden=orden, cargo=cargo.replace("'", "''"), años_experiencia_previa=años_experiencia_previa, oferta_sie=oferta_sie, estudiante_id=estudiante_id, empresa_id=empresa_id)
+    '''.format(fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, orden=orden, cargo=cargo.replace("'", "''"), años_experiencia_previa=años_experiencia_previa, oferta_sie=oferta_sie, estudiante_id=estudiante_id, empresa_id=empresa_id)
