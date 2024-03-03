@@ -160,11 +160,11 @@ def taskSector(___, __):
         INSERT INTO sector (nombre) VALUES ('{nombre_sector}');
     '''
 
-def taskTipoEmpresa(___, __):
-    for nombre_tipo in ['publico', 'privada']:
-        return f'''
+def taskTipoEmpresa(i, __):
+    nombre_tipo = ('publico', 'privada')[i % 2]
+    return f'''
             INSERT INTO tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
-        '''
+    '''
 
 def taskEmpresa(___, volumen):
     nombre_empresa = fake.company()
