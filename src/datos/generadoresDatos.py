@@ -159,6 +159,7 @@ def taskTrabajoEstudianteSalario(___, volumen):
         INSERT INTO trabajoEstudianteSalario (salario, trabajoEstudianteId) VALUES ({salario}, {trabajoEstudianteId});
     '''
 
+## 8 sedes x 8 facultades = 64 facultades
 def taskFacultad(_, __):
     facultades = [
         "Facultad de Ingeniería",
@@ -182,6 +183,7 @@ def taskFacultad(_, __):
 
     return stringquery
 
+## 1 departamentos x 64 facultades = 64 departamentos
 def taskDepartamento(i, __):
     facultades = [
         "Facultad de Ingeniería",
@@ -194,28 +196,18 @@ def taskDepartamento(i, __):
         "Facultad de Ciencias Jurídicas"
     ]
     
-    departamentos = [
-        "Departamento de Ingeniería",
-        "Departamento de Ciencias Sociales",
-        "Departamento de Ciencias Económicas",
-        "Departamento de Ciencias de la Salud",
-        "Departamento de Ciencias de la Educación",
-        "Departamento de Ciencias Naturales",
-        "Departamento de Ciencias Humanas",
-        "Departamento de Ciencias Jurídicas"
-    ]
-    
     stringquery = ""
     for facultadId in range(1,65):
-        stringquery += f"INSERT INTO departamento (nombre, facultadId) VALUES ('{departamentos[i]}', '{facultadId}' );\n"
+        stringquery += f"INSERT INTO departamento (nombre, facultadId) VALUES ('Departamento', '{facultadId}' );\n"
     return stringquery
 
+## 3 tipos de carrera x 2 nombres de carrera x 64 departamentos = 384 carreras
 def taskCarrera(___, volumen):
     tipos_carrera = ['Pregrado', 'Maestría', 'Doctorado']
     nombres_carrera = ['Carrera 1', 'Carrera 2']
     for tipo in tipos_carrera:
         for nombre in nombres_carrera:
-            for departamento_id in range(1, 9):
+            for departamento_id in range(1, 65):
                 nombre_carrera = f'{nombre}'
                 tipo_carrera_id = tipo.index(tipo) + 1  
                 yield f'''
@@ -225,7 +217,7 @@ def taskCarrera(___, volumen):
 
 def taskEgresado(___, volumen):
     año_egreso = fake.random_int(min=2003, max=2023)
-    carrera_id = fake.random_int(min=1, max=48)
+    carrera_id = fake.random_int(min=1, max=384)
     estudiante_id = fake.random_int(min=1, max=volumen)
     return f'''
         INSERT INTO egresado (año, carreraId, estudianteId) VALUES ({año_egreso}, {carrera_id}, {estudiante_id});
