@@ -128,6 +128,62 @@ def taskEmpresa(___, volumen):
         VALUES ('{nombre_empresa}', '{correo_empresa}', '{web_empresa}', {tipo_empresa_id}, {sector_empresa_id});
     '''
 
+
+trabajos = [
+    "Ingeniero de software",
+    "Desarrollador web",
+    "Analista de datos",
+    "Consultor financiero",
+    "Economista",
+    "Arquitecto",
+    "Ingeniero civil",
+    "Ingeniero eléctrico",
+    "Ingeniero mecánico",
+    "Ingeniero industrial",
+    "Diseñador gráfico",
+    "Periodista",
+    "Fotógrafo",
+    "Científico de datos",
+    "Investigador",
+    "Abogado",
+    "Abogado de derechos humanos",
+    "Contador",
+    "Psicólogo",
+    "Veterinario",
+    "Médico",
+    "Enfermero",
+    "Dentista",
+    "Farmacéutico",
+    "Biólogo",
+    "Químico",
+    "Profesor",
+    "Maestro",
+    "Consejero escolar",
+    "Analista de sistemas",
+    "Programador",
+    "Analista de negocios",
+    "Gerente de proyecto",
+    "Consultor de gestión",
+    "Marketing Manager",
+    "Recursos Humanos",
+    "Gerente de ventas",
+    "Especialista en relaciones públicas",
+    "Analista financiero",
+    "Director de marketing",
+    "Analista de mercado",
+    "Gerente de producto",
+    "Gerente de operaciones",
+    "Gerente de calidad",
+    "Ingeniero de control de calidad",
+    "Diseñador de productos",
+    "Gerente de cadena de suministro",
+    "Logística y distribución",
+    "Gerente de compras",
+    "Gerente de producción"
+]
+
+fake.job = lambda: random.choice(trabajos)
+
 def taskTrabajoEstudiante(___, volumen):
     random_number = random.random()
     probabilidad_ejecucion = 0.5
