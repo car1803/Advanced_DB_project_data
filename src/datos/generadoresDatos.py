@@ -146,7 +146,7 @@ def taskTrabajoEstudiante(___, volumen):
     años_experiencia_previa = fake.random_int(min=0, max=10)
     oferta_sie = fake.boolean()
     estudiante_id = fake.random_int(min=1, max=volumen) 
-    empresa_id = fake.random_int(min=1, max=1000)
+    empresa_id = fake.random_int(min=1, max=volumen)
     return '''
         INSERT INTO trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
         VALUES ('{fecha_inicio}', {fecha_fin}, {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
@@ -182,7 +182,7 @@ def taskFacultad(_, __):
 
     return stringquery
 
-def taskDepartamento(_, __):
+def taskDepartamento(i, __):
     facultades = [
         "Facultad de Ingeniería",
         "Facultad de Ciencias Sociales",
@@ -206,10 +206,8 @@ def taskDepartamento(_, __):
     ]
     
     stringquery = ""
-    for i, facultad in enumerate(facultades):
-        departamento = departamentos[i]
-        stringquery += f"INSERT INTO departamento (nombre, facultadId) VALUES ('{departamento}', (SELECT id FROM facultad WHERE nombre = '{facultad}'));\n"
-
+    for facultadId in range(1,65):
+        stringquery += f"INSERT INTO departamento (nombre, facultadId) VALUES ('{departamentos[i]}', '{facultadId}' );\n"
     return stringquery
 
 def taskCarrera(___, volumen):
