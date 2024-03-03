@@ -5,6 +5,6 @@ postgresCredentials = {
     "password":"665RE(v&x>iVL;6<"
 }
 
-schema = "testEsquema"
+schema = "testEsquema2"
 
 postgresUri = f"postgresql://{postgresCredentials['user']}:{postgresCredentials['password']}@{postgresCredentials['host']}/{postgresCredentials['database']}"

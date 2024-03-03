@@ -4,10 +4,8 @@ from src.connectors.postgresqlcredenciales import schema
 from src.datos.generadoresDatos import taskEstudianteIdioma, taskInstitucionExterna, taskCarrera, taskDepartamento, taskFacultad, taskEgresado,taskInstitucionExterna, taskPais,taskIdioma, taskIdiomaNivel, taskDocumento, taskEstudiante, taskTipoCarrera, taskSede, taskEducacionExterna, taskSector, taskTipoEmpresa, taskEmpresa, taskTrabajoEstudiante, taskTrabajoEstudianteSalario
 
 cursor = connection.cursor()
-volumen = 100000 + 1 #Esto es porque se usa mod para saber cuando hacer commit
-factor = 1000 
 
-def populate_tables():
+def populate_tables(volumen = 100000 + 1, factor = 1000):
     print("Generando e insertando datos ficticios en las tablas...")
 
     # Generar e insertar datos ficticios en la tabla 'pais'
