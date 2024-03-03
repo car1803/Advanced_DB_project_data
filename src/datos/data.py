@@ -9,10 +9,10 @@ def populate_tables(volumen = 100000 + 1, factor = 1000):
 
     # Generar e insertar datos ficticios en la tabla 'pais'
     print("Datos insertados en la tabla 'pais'.")
-    taskInsert(taskPais, 201, connection,cursor, 200)
+    taskInsert(taskPais, 12, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'tipoDocumento'
-    print("Datos insertados en la tabla 'pais'.")
+    print("Datos insertados en la tabla 'tipoDocumento'.")
     taskInsert(taskDocumento, 4, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'estudiante'
@@ -20,10 +20,10 @@ def populate_tables(volumen = 100000 + 1, factor = 1000):
     taskInsert(taskEstudiante, volumen, connection, cursor, factor)
 
     print("Datos insertados en la tabla 'tipoCarrera'.")
-    taskInsert(taskTipoCarrera, volumen, connection, cursor, factor)
+    taskInsert(taskTipoCarrera, 3, connection, cursor, 1)
     
     print("Datos insertados en la tabla 'idioma'.")
-    taskInsert(taskIdioma, volumen, connection, cursor, factor)
+    taskInsert(taskIdioma, 6, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'idiomaNivel'
     print("Datos insertados en la tabla 'idiomaNivel'.")
@@ -35,7 +35,7 @@ def populate_tables(volumen = 100000 + 1, factor = 1000):
 
     # Generar e insertar datos ficticios en la tabla 'institucionExterna'
     print("Datos insertados en la tabla 'institucionExterna'.")
-    taskInsert(taskInstitucionExterna, volumen, connection, cursor, factor)
+    taskInsert(taskInstitucionExterna, 10, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'educacionExterna'
     print("Datos insertados en la tabla 'educacionExterna'.")
@@ -43,7 +43,7 @@ def populate_tables(volumen = 100000 + 1, factor = 1000):
 
     # Generar e insertar datos ficticios en la tabla 'sector'
     print("Datos insertados en la tabla 'sector'.")
-    taskInsert(taskSector, volumen, connection, cursor, factor)
+    taskInsert(taskSector, 8, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'tipoEmpresa'
     print("Datos insertados en la tabla 'tipoEmpresa'.")
@@ -51,27 +51,27 @@ def populate_tables(volumen = 100000 + 1, factor = 1000):
 
     # Generar e insertar datos ficticios en la tabla 'empresa'
     print("Datos insertados en la tabla 'empresa'.")
-    taskInsert(taskEmpresa, volumen, connection, cursor, factor)
+    taskInsert(taskEmpresa, 1000, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'trabajoEstudiante'
     print("Datos insertados en la tabla 'trabajoEstudiante'.")
     taskInsert(taskTrabajoEstudiante, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'trabajoEstudianteSalario'
-    taskInsert(taskTrabajoEstudianteSalario, volumen, connection, cursor, factor)
     print("Datos insertados en la tabla 'trabajoEstudianteSalario'.")
+    taskInsert(taskTrabajoEstudianteSalario, volumen, connection, cursor, factor)
 
     # Generar e insertar datos ficticios en la tabla 'facultad'
     print("Datos insertados en la tabla 'facultad'.")
-    taskInsert(taskFacultad, volumen, connection, cursor, factor)
+    taskInsert(taskFacultad, 1, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'departamento'
     print("Datos insertados en la tabla 'departamento'.")
-    taskInsert(taskDepartamento, volumen, connection, cursor, factor)
+    taskInsert(taskDepartamento, 1, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'carrera'
     print("Datos insertados en la tabla 'carrera'.")
-    taskInsert(taskCarrera, volumen, connection, cursor, factor)
+    taskInsert(taskCarrera, 1, connection, cursor, 1)
 
     # Generar e insertar datos ficticios en la tabla 'egresado'
     print("Datos insertados en la tabla 'egresado'.")
