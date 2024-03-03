@@ -205,15 +205,17 @@ def taskDepartamento(i, __):
 def taskCarrera(___, volumen):
     tipos_carrera = ['Pregrado', 'Maestría', 'Doctorado']
     nombres_carrera = ['Carrera 1', 'Carrera 2']
+    query = ""
     for tipo in tipos_carrera:
         for nombre in nombres_carrera:
             for departamento_id in range(1, 65):
                 nombre_carrera = f'{nombre}'
                 tipo_carrera_id = tipo.index(tipo) + 1  
-                yield f'''
+                query += f'''
                     INSERT INTO carrera (nombre, tipoCarreraId, departamentoId) 
                     VALUES ('{nombre_carrera}', {tipo_carrera_id}, {departamento_id});
                 '''
+    return query
 
 def taskEgresado(___, volumen):
     año_egreso = fake.random_int(min=2003, max=2023)
