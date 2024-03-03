@@ -36,10 +36,10 @@ def set_schema(schema):
     print("Esquema establecido.")
     connection.commit()
 
-def create_tables(migration_file):
+def execute_script(migration_file):
     import os
 
-    print("Creando tablas con el archivo de migración...", migration_file)
+    print("Ejecutando Scripot con el archivo de migración...", migration_file)
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
     directorio_script = os.path.dirname(ruta_script) 
     print(directorio_script)
@@ -49,11 +49,8 @@ def create_tables(migration_file):
     with open(ruta_archivo, "r", encoding="utf-8") as archivo:
         contenido = archivo.read()
         cursor = connection.cursor()
-        print("Creando tablas...")
+        print("Ejecutando script...")
         cursor.execute(contenido)
 
-    print("Tablas creadas.")
+    print("Proceso Finalizado.")
     connection.commit()
-
-if __name__ == '__main__':
-    create_tables()
