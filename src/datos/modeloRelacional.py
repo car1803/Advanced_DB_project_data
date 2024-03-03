@@ -72,6 +72,8 @@ def execute_script_by_steps(migration_file):
             cursor = connection.cursor()
             print("Ejecutando script...")
             print(query)
+            if query.strip() == '':
+                continue
             cursor.execute(query)
             connection.commit()
             print("Hecho...")

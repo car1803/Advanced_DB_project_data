@@ -63,32 +63,49 @@ INSERT INTO esquemadimensional.hEstudianteIdioma (idiomaId, idiomaNivelId, estud
 SELECT idiomaId, idiomaNivelId, estudianteId FROM esquemarelacional.estudianteIdioma;
 
 INSERT INTO esquemadimensional.hEmpresa (id, nombre, correo, web, tipoEmpresaId, sectorId, gastoEnSalariosTotal, numeroDeEmpleadosTotal, numerodeEmpleadosActual)
-SELECT 
-	e.id,
-    e.nombre,
-    e.correo,
-    e.web,
-    e.tipoEmpresaId,
-    e.sectorId,
-    COALESCE((
-        SELECT SUM(tes.salario)
-        FROM  esquemarelacional.trabajoEstudianteSalario AS tes
-        JOIN  esquemarelacional.trabajoEstudiante AS te ON tes.trabajoEstudianteId = te.id
-        WHERE te.empresaId = e.id
-    ), 0) AS gastoEnSalariosTotal,
-    COALESCE((
-        SELECT COUNT(DISTINCT(te.id))
-        FROM  esquemarelacional.trabajoEstudiante AS te
-        WHERE te.empresaId = e.id
-    ), 0) AS numeroDeEmpleadosTotal,
-    COALESCE((
-        SELECT COUNT(DISTINCT(te.id))
-        FROM  esquemarelacional.trabajoEstudiante AS te
-        WHERE te.empresaId = e.id
-        AND te.fechaFin IS NULL
-    ), 0) AS numerodeEmpleadosActual
-FROM  esquemarelacional.empresa AS e
-GROUP BY e.id;  
+SELECT
+    id,
+    nombre,
+    correo,
+    web,
+    tipoEmpresaId,
+    sectorId,
+    0 AS gastoensalariostotal,
+    0 as numeroDeEmpleadosTotal,
+    0 as numerodeEmpleadosActual
+FROM esquemarelacional.empresa;
+
+UPDATE esquemadimensional.hEmpresa h
+SET gastoensalariostotal = subquery.total_salario
+FROM (
+    SELECT h.id, SUM(tes.salario) AS total_salario
+    FROM esquemadimensional.hEmpresa h
+    JOIN esquemarelacional.trabajoEstudiante AS te ON te.empresaId = h.id
+    JOIN esquemarelacional.trabajoEstudianteSalario AS tes ON tes.trabajoEstudianteId = te.id
+    GROUP BY h.id
+) AS subquery
+WHERE h.id = subquery.id;
+
+UPDATE esquemadimensional.hEmpresa h
+SET numeroDeEmpleadosTotal = subquery.numeroDeEmpleadosTotal
+FROM (
+    SELECT h.id, count(te.id) AS numeroDeEmpleadosTotal
+    FROM esquemadimensional.hEmpresa h
+    JOIN esquemarelacional.trabajoEstudiante AS te ON te.empresaId = h.id
+    GROUP BY h.id
+) AS subquery
+WHERE h.id = subquery.id;
+
+UPDATE esquemadimensional.hEmpresa h
+SET numerodeEmpleadosActual = subquery.numerodeEmpleadosActual
+FROM (
+    SELECT h.id, count(te.id) AS numerodeEmpleadosActual
+    FROM esquemadimensional.hEmpresa h
+    JOIN esquemarelacional.trabajoEstudiante AS te ON te.empresaId = h.id
+    WHERE te.fechaFin IS NULL
+    GROUP BY h.id
+) AS subquery
+WHERE h.id = subquery.id;
 
 INSERT INTO esquemadimensional.dEmpresaCarrera (empresaId, carreraId)
 SELECT he.id, ee.carreraId
