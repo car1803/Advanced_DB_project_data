@@ -31,7 +31,7 @@ def populate_tables(volumen = 100000 + 1, factor = 1000):
 
     # Insertar datos específicos en la tabla 'sede'
     print("Datos insertados en la tabla 'sede'.")
-    taskInsert(taskSede, 9, connection, cursor, 8)
+    taskInsert(taskSede, 8, connection, cursor, 7)
 
     # Generar e insertar datos ficticios en la tabla 'institucionExterna'
     print("Datos insertados en la tabla 'institucionExterna'.")
