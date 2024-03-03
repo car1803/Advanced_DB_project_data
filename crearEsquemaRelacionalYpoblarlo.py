@@ -10,6 +10,6 @@ drop_schema(esquemarelacional)
 create_schema(esquemarelacional)
 set_schema(esquemarelacional)
 execute_script(nombrearchivorelacional)
-populate_tables(201, 100)  # Se preuba con menos datos para salir de errores rápido
+populate_tables(100001, 1000)  # Se preuba con menos datos para salir de errores rápido
 
 connection.close()

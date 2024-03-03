@@ -43,7 +43,7 @@ JOIN esquemadimensional.dTiempo tf ON te.fechaFin = tf.fecha
 GROUP BY te.id, ti.id, tf.id, te.orden, te.cargo, te.añosExperienciaPrevia, te.ofertaSie, te.estudianteId, te.empresaId;
 
 INSERT INTO esquemadimensional.dTrabajoEstudianteCarrera (trabajoEstudianteId, carreraId)
-SELECT hte.id AS trabajoEstudianteId, ee.carreraId
+SELECT distinct hte.id AS trabajoEstudianteId, ee.carreraId
 FROM esquemadimensional.hTrabajoEstudiante hte
 JOIN esquemarelacional.estudiante e ON e.id = hte.estudianteid 
 JOIN esquemarelacional.egresado ee ON ee.estudianteId = e.id;
