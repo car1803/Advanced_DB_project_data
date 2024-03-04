@@ -10,7 +10,7 @@ python .\crearEsquemaRelacionalYpoblarlo.py
 python .\crearEsquemaDimensionalyPoblarlo.py
 ```
 
-Para configurar la base de datos, el esquema y demás, utilizar un archivo .env con la siguiente estructura.
+Para configurar la base de datos, el esquema y demás, utilizar un archivo .env con la siguiente estructura y ponerlo en la ruta base del proyecto.
 
 ```
 POSTGRES_HOST=localhost
