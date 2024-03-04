@@ -112,10 +112,10 @@ def taskSector(i, __):
     '''.format(nombre_sector=nombre_sector.replace("'", "''"))
 
 def taskTipoEmpresa(i,_):
-    for nombre_tipo in ('Pública', 'Privada')[i % 2]:
-        return f'''
-            INSERT INTO tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
-        '''
+    nombre_tipo = ('Pública', 'Privada')[i % 2]
+    return f'''
+        INSERT INTO tipoEmpresa (nombre) VALUES ('{nombre_tipo}');
+    '''
 
 def taskEmpresa(___, volumen):
     nombre_empresa = fake.company()
@@ -202,7 +202,7 @@ def taskTrabajoEstudiante(___, volumen):
     años_experiencia_previa = fake.random_int(min=0, max=10)
     oferta_sie = fake.boolean()
     estudiante_id = fake.random_int(min=1, max=volumen) 
-    empresa_id = fake.random_int(min=1, max=volumen)
+    empresa_id = fake.random_int(min=1, max=1000) #TODO: este valor está quemado por el número de empresas sería bueno poder parametrisar eso
     return '''
         INSERT INTO trabajoEstudiante (fechaInicio, fechaFin, orden, cargo, añosExperienciaPrevia, ofertaSie, estudianteId, empresaId)
         VALUES ('{fecha_inicio}', {fecha_fin}, {orden}, '{cargo}', {años_experiencia_previa}, {oferta_sie}, {estudiante_id}, {empresa_id});
