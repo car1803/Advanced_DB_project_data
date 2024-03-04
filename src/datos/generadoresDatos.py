@@ -266,7 +266,7 @@ def taskCarrera(___, volumen):
         for nombre in nombres_carrera:
             for departamento_id in range(1, 65):
                 nombre_carrera = f'{nombre}'
-                tipo_carrera_id = tipo.index(tipo) + 1  
+                tipo_carrera_id = tipos_carrera.index(tipo) + 1  
                 query += f'''
                     INSERT INTO carrera (nombre, tipoCarreraId, departamentoId) 
                     VALUES ('{nombre_carrera}', {tipo_carrera_id}, {departamento_id});
