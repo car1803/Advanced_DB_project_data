@@ -3,10 +3,18 @@
 ```pip install psycopg2-binary```
 # Ejecución:
 
-Ahora se ejecuta el archvo crearEsquemayPobrarlo.py con
+Ejecutar los archivos crearEsquemaRelacionalYpoblarlo y pycrearEsquemaDimensionalyPoblarlo.py, estos archivos generan el esquema relacional, el dimensional y generan los datos ficticios en el relacional y ejecutan el etl al relacional.
 
 ```
-python.exe .\crearEsquemayPoblarlo.py
+python .\crearEsquemaRelacionalYpoblarlo.py
+python .\crearEsquemaDimensionalyPoblarlo.py
 ```
 
-La idea es que todos los scritpts que se hagan usen lo que está dentro de la ruta *src* pero que se ejecuten desde la raiz del proyecto 
+Para configurar la base de datos, el esquema y demás, utilizar un archivo .env con la siguiente estructura.
+
+```
+POSTGRES_HOST=localhost
+POSTGRES_DATABASE=egresados
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=tu_contrasena
+```
