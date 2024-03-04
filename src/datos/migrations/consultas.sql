@@ -1,0 +1,284 @@
+-- Trabajo
+
+-- Datos 
+
+-- Duración promedio de un trabajo en días
+
+SELECT AVG(dt_fin.fecha - dt_inicio.fecha) AS duracion_promedio_en_dias
+FROM esquemadimensional.hTrabajoEstudiante he
+JOIN esquemadimensional.dTiempo dt_inicio ON he.fechaInicioId = dt_inicio.id
+JOIN esquemadimensional.dTiempo dt_fin ON he.fechaFinId = dt_fin.id
+WHERE he.fechaFinId IS NOT NULL;
+
+-- Años de experiencia previos promedio de un trabajo
+
+SELECT AVG(añosExperienciaPrevia) AS experiencia_previa_promedio
+FROM esquemadimensional.hTrabajoEstudiante;
+
+-- Número de trabajos promedio de un estudiante
+
+SELECT AVG(num_trabajos) AS num_trabajos_promedio
+FROM (
+    SELECT estudianteId, COUNT(*) AS num_trabajos
+    FROM esquemadimensional.hTrabajoEstudiante
+    GROUP BY estudianteId
+) AS trabajos_por_estudiante;
+
+-- Número de trabajos aplicados por SIE
+
+SELECT COUNT(*) AS num_trabajos_SIE
+FROM esquemadimensional.hTrabajoEstudiante
+WHERE ofertaSie = true; 
+
+-- Porcentaje de trabajos aplicados por SIE
+
+SELECT (COUNT(CASE WHEN ofertaSie = true THEN 1 END) * 100.0) / COUNT(*) AS porcentaje_trabajos_SIE
+FROM esquemadimensional.hTrabajoEstudiante;
+
+-- Salario promedio de trabajos 
+
+SELECT AVG(salarioPromedio) AS salario_promedio
+FROM esquemadimensional.hTrabajoEstudiante he;
+
+-- Gráficos de barras 
+
+-- Duración promedio en días de trabajo por cargo
+
+SELECT cargo, AVG((dt.fecha - dt_inicio.fecha)) AS duracion_promedio
+FROM esquemadimensional.hTrabajoEstudiante he
+JOIN esquemadimensional.dTiempo dt_inicio ON he.fechaInicioId = dt_inicio.id
+JOIN esquemadimensional.dTiempo dt ON he.fechaFinId = dt.id
+GROUP BY cargo;
+
+-- Salario promedio de trabajo por cargo 
+
+SELECT cargo, AVG(salarioPromedio) AS salario_promedio
+FROM esquemadimensional.hTrabajoEstudiante he
+GROUP BY cargo
+order by salario_promedio;
+
+-- Número de trabajos por sector empresarial 
+
+SELECT em.nombreSector AS sector_empresa, COUNT(se.id) AS num_trabajos
+FROM esquemadimensional.hTrabajoEstudiante te
+JOIN esquemadimensional.dEmpresa em ON te.empresaId = em.id
+GROUP BY em.nombreSector
+ORDER BY num_trabajos;
+
+-- Número de trabajos por carrera 
+
+SELECT dc.nombrefacultad || ' ' || dc.nombre AS carrera, COUNT(h.id) AS num_trabajos
+FROM esquemadimensional.hTrabajoEstudiante h
+JOIN esquemadimensional.dTrabajoEstudianteCarrera t ON h.id = t.trabajoEstudianteId
+JOIN esquemadimensional.dCarrera dc ON t.carreraId = dc.id
+GROUP BY carrera
+ORDER BY num_trabajos;
+
+-- Número de trabajos por facultad 
+
+SELECT dc.nombreFacultad AS facultad, COUNT(h.id) AS num_trabajos
+FROM esquemadimensional.hTrabajoEstudiante h
+JOIN esquemadimensional.dTrabajoEstudianteCarrera t ON h.id = t.trabajoEstudianteId
+JOIN esquemadimensional.dCarrera dc ON t.carreraId = dc.id
+GROUP BY dc.nombreFacultad
+ORDER BY num_trabajos;
+
+--Número de trabajos por sede 
+
+SELECT dc.nombreSede AS sede, COUNT(h.id) AS num_trabajos
+FROM esquemadimensional.hTrabajoEstudiante h
+JOIN esquemadimensional.dTrabajoEstudianteCarrera t ON h.id = t.trabajoEstudianteId
+JOIN esquemadimensional.dCarrera dc ON t.carreraId = dc.id
+GROUP BY dc.nombreSede
+ORDER BY num_trabajos;
+
+-- Número de trabajos por cargo 
+
+SELECT cargo, COUNT(id) AS num_trabajos
+FROM esquemadimensional.hTrabajoEstudiante
+GROUP BY cargo;
+
+-- Gráficos de pastel 
+
+-- Distribución de genero por estudiantes que trabajan
+
+SELECT e.genero, COUNT(te.id) AS num_estudiantes
+FROM esquemadimensional.hTrabajoEstudiante te
+INNER JOIN esquemadimensional.dEstudiante e ON te.estudianteId = e.id
+GROUP BY e.genero;
+
+-- Gráficos de línea 
+
+-- Número de trabajos por año
+
+SELECT dt.year AS año,
+       COUNT(he.id) AS num_trabajos
+FROM esquemadimensional.hTrabajoEstudiante he
+JOIN esquemadimensional.dTiempo dt ON he.fechainicioId = dt.id
+GROUP BY dt.year
+ORDER BY dt.year;
+
+-- Empresa 
+
+-- Datos 
+
+-- Conteo de empresas
+
+SELECT COUNT(id) AS total_empresas
+FROM esquemadimensional.hEmpresa;
+
+-- Gráfico de barras
+
+-- Gasto en salarios por sector 
+
+SELECT se.nombre AS sector_empresa, SUM(he.gastoEnSalariosTotal) AS gasto_salarios
+FROM esquemadimensional.hEmpresa he
+JOIN esquemadimensional.dSector se ON he.sectorId = se.id
+GROUP BY se.nombre;
+ 
+-- Número de empleados actual por sector 
+
+SELECT se.nombre AS sector_empresa, SUM(he.numerodeEmpleadosActual) AS num_empleados_actual
+FROM esquemadimensional.hEmpresa he
+JOIN esquemadimensional.dSector se ON he.sectorId = se.id
+GROUP BY se.nombre;
+
+-- Número de empleados por carrera y tipo
+
+SELECT dc.nombre AS carrera, dc.nombretipocarrera AS tipo_carrera, COUNT(*) AS cantidad_empleados
+FROM esquemadimensional.hEmpresa he
+INNER JOIN esquemadimensional.dEmpresaCarrera dec ON he.id = dec.empresaId
+INNER JOIN esquemadimensional.dCarrera dc ON dec.carreraId = dc.id
+GROUP BY dc.nombre, dc.nombretipocarrera;
+
+-- Gasto en salario total por carrera y tipo
+
+SELECT dc.nombre AS carrera, dc.nombretipocarrera AS tipo_carrera, SUM(he.gastoEnSalariosTotal) AS gasto_salarios_total
+FROM esquemadimensional.hEmpresa he
+INNER JOIN esquemadimensional.dEmpresaCarrera dec ON he.id = dec.empresaId
+INNER JOIN esquemadimensional.dCarrera dc ON dec.carreraId = dc.id
+GROUP BY dc.nombre, dc.nombretipocarrera;
+
+-- Número de empleados actuales por empresa
+
+SELECT he.nombre, he.numerodeempleadosactual
+FROM esquemadimensional.hEmpresa he
+LIMIT (SELECT COUNT(*) FROM esquemadimensional.hEmpresa) / 10;
+
+-- Gasto total por empresa
+
+SELECT he.nombre, he.gastoensalariostotal
+FROM esquemadimensional.hEmpresa he
+LIMIT (SELECT COUNT(*) FROM esquemadimensional.hEmpresa) / 10;
+
+-- Gráficos de pastel
+
+-- Distribución por sector 
+
+SELECT se.nombre AS sector_empresa, COUNT(he.id) AS cantidad_empresas
+FROM esquemadimensional.hEmpresa he
+JOIN esquemadimensional.dSectorEmpresa se ON he.sectorEmpresaId = se.id
+GROUP BY se.nombre;
+
+
+-- Número de empleados actual por tipo 
+
+SELECT te.nombre AS tipo_empresa, SUM(he.numerodeEmpleadosActual) AS num_empleados_actual
+FROM esquemadimensional.hEmpresa he
+JOIN esquemadimensional.dTipoEmpresa te ON he.tipoEmpresaId = te.id
+GROUP BY te.nombre;
+
+
+-- Distribución por tipo 
+
+SELECT te.nombre AS tipo_empresa, COUNT(he.id) AS cantidad_empresas
+FROM esquemadimensional.hEmpresa he
+JOIN esquemadimensional.dTipoEmpresa te ON he.tipoEmpresaId = te.id
+GROUP BY te.nombre;
+
+-- Gasto en salarios por tipo 
+
+SELECT te.nombre AS tipo_empresa, SUM(he.gastoEnSalariosTotal) AS gasto_salarios
+FROM esquemadimensional.hEmpresa he
+JOIN esquemadimensional.dTipoEmpresa te ON he.tipoEmpresaId = te.id
+GROUP BY te.nombre;
+
+-- Idioma 
+
+-- Datos 
+
+-- Número de idiomas
+
+SELECT COUNT(DISTINCT idiomaid) AS total_idiomas
+FROM esquemadimensional.hEstudianteIdioma;
+
+-- Gráfico de barras
+
+-- Número de idiomas por empresa
+
+SELECT dEmpresa.nombre AS nombre_empresa, COUNT(DISTINCT hEstudianteIdioma.idiomaId) AS numero_idiomas
+FROM esquemadimensional.hEstudianteIdioma
+INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa ON hEstudianteIdioma.id = dEstudianteIdiomaEmpresa.estudianteIdiomaId
+INNER JOIN esquemadimensional.dEmpresa ON dEstudianteIdiomaEmpresa.empresaId = dEmpresa.id
+GROUP BY dEmpresa.nombre
+limit 100;
+
+-- Nivel de idioma 
+
+select id as nivel, nombre 
+from esquemadimensional.didiomanivel d;
+
+-- Nivel promedio de idioma principal por empresa 
+
+SELECT dEmpresa.nombre AS nombre_empresa, AVG(hEstudianteIdioma.idiomaNivelId) AS nivel_promedio_idioma
+FROM esquemadimensional.hEstudianteIdioma
+INNER JOIN (
+    SELECT estudianteId, MAX(idiomaNivelId) AS idiomaNivelId
+    FROM esquemadimensional.hEstudianteIdioma
+    GROUP BY estudianteId
+) AS max_nivel ON hEstudianteIdioma.estudianteId = max_nivel.estudianteId AND hEstudianteIdioma.idiomaNivelId = max_nivel.idiomaNivelId
+INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa ON hEstudianteIdioma.id = dEstudianteIdiomaEmpresa.estudianteIdiomaId
+INNER JOIN esquemadimensional.dEmpresa ON dEstudianteIdiomaEmpresa.empresaId = dEmpresa.id
+GROUP BY dEmpresa.nombre;
+
+-- Nivel promedio de idioma principal por sector 
+
+SELECT dEmpresa.nombreSector AS nombre_sector, AVG(hEstudianteIdioma.idiomaNivelId) AS nivel_promedio_idioma
+FROM esquemadimensional.hEstudianteIdioma
+INNER JOIN (
+    SELECT estudianteId, MAX(idiomaNivelId) AS idiomaNivelId
+    FROM esquemadimensional.hEstudianteIdioma
+    GROUP BY estudianteId
+) AS max_nivel ON hEstudianteIdioma.estudianteId = max_nivel.estudianteId AND hEstudianteIdioma.idiomaNivelId = max_nivel.idiomaNivelId
+INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa ON hEstudianteIdioma.id = dEstudianteIdiomaEmpresa.estudianteIdiomaId
+INNER JOIN esquemadimensional.dEmpresa ON dEstudianteIdiomaEmpresa.empresaId = dEmpresa.id
+GROUP BY dEmpresa.nombreSector;
+
+-- Número de idiomas por tipo de carrera
+
+SELECT dCarrera.nombreTipoCarrera AS tipo_carrera, COUNT(DISTINCT hEstudianteIdioma.idiomaId) AS numero_idiomas
+FROM esquemadimensional.hEstudianteIdioma
+INNER JOIN esquemadimensional.dEstudianteIdiomaCarrera ON hEstudianteIdioma.id = dEstudianteIdiomaCarrera.estudianteIdiomaId
+INNER JOIN esquemadimensional.dCarrera ON dEstudianteIdiomaCarrera.carreraId = dCarrera.id
+GROUP BY dCarrera.nombreTipoCarrera;
+
+-- Nivel promedio de idioma principal por tipo carrera 
+
+SELECT dCarrera.nombreTipoCarrera AS tipo_carrera, AVG(hEstudianteIdioma.idiomaNivelId) AS nivel_promedio_idioma
+FROM esquemadimensional.hEstudianteIdioma
+INNER JOIN (
+    SELECT estudianteId, MAX(idiomaNivelId) AS idiomaNivelId
+    FROM esquemadimensional.hEstudianteIdioma
+    GROUP BY estudianteId
+) AS max_nivel ON hEstudianteIdioma.estudianteId = max_nivel.estudianteId AND hEstudianteIdioma.idiomaNivelId = max_nivel.idiomaNivelId
+INNER JOIN esquemadimensional.dEstudianteIdiomaCarrera ON hEstudianteIdioma.id = dEstudianteIdiomaCarrera.estudianteIdiomaId
+INNER JOIN esquemadimensional.dCarrera ON dEstudianteIdiomaCarrera.carreraId = dCarrera.id
+GROUP BY dCarrera.nombreTipoCarrera;
+
+-- Distribución de nivel por idioma
+
+SELECT dIdioma.nombre AS idioma, dIdiomaNivel.nombre AS nivel, COUNT(hEstudianteIdioma.id) AS cantidad_estudiantes
+FROM esquemadimensional.hEstudianteIdioma
+INNER JOIN esquemadimensional.dIdioma ON hEstudianteIdioma.idiomaId = dIdioma.id
+INNER JOIN esquemadimensional.dIdiomaNivel ON hEstudianteIdioma.idiomaNivelId = dIdiomaNivel.id
+GROUP BY dIdioma.nombre, dIdiomaNivel.nombre;
