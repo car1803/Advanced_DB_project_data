@@ -1,5 +1,5 @@
 -- Trabajo
-
+SET search_path TO esquemadimensional;
 -- Datos 
 
 -- Duración promedio de un trabajo en días
@@ -59,7 +59,7 @@ order by salario_promedio;
 
 -- Número de trabajos por sector empresarial 
 
-SELECT em.nombreSector AS sector_empresa, COUNT(se.id) AS num_trabajos
+SELECT em.nombreSector AS sector_empresa, COUNT(te.id) AS num_trabajos
 FROM esquemadimensional.hTrabajoEstudiante te
 JOIN esquemadimensional.dEmpresa em ON te.empresaId = em.id
 GROUP BY em.nombreSector
@@ -177,7 +177,7 @@ LIMIT (SELECT COUNT(*) FROM esquemadimensional.hEmpresa) / 10;
 
 SELECT se.nombre AS sector_empresa, COUNT(he.id) AS cantidad_empresas
 FROM esquemadimensional.hEmpresa he
-JOIN esquemadimensional.dSectorEmpresa se ON he.sectorEmpresaId = se.id
+JOIN esquemadimensional.dSector se ON he.sectorid = se.id
 GROUP BY se.nombre;
 
 
@@ -216,11 +216,11 @@ FROM esquemadimensional.hEstudianteIdioma;
 
 -- Número de idiomas por empresa
 
-SELECT dEmpresa.nombre AS nombre_empresa, COUNT(DISTINCT hEstudianteIdioma.idiomaId) AS numero_idiomas
-FROM esquemadimensional.hEstudianteIdioma
-INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa ON hEstudianteIdioma.id = dEstudianteIdiomaEmpresa.estudianteIdiomaId
-INNER JOIN esquemadimensional.dEmpresa ON dEstudianteIdiomaEmpresa.empresaId = dEmpresa.id
-GROUP BY dEmpresa.nombre
+SELECT de.nombre AS nombre_empresa, COUNT(DISTINCT he.idiomaId) AS numero_idiomas
+FROM esquemadimensional.hEstudianteIdioma he
+INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa des ON he.id = des.estudianteIdiomaId
+INNER JOIN esquemadimensional.dEmpresa de ON des.empresaId = he.id
+GROUP BY de.nombre
 limit 100;
 
 -- Nivel de idioma 
@@ -230,55 +230,55 @@ from esquemadimensional.didiomanivel d;
 
 -- Nivel promedio de idioma principal por empresa 
 
-SELECT dEmpresa.nombre AS nombre_empresa, AVG(hEstudianteIdioma.idiomaNivelId) AS nivel_promedio_idioma
-FROM esquemadimensional.hEstudianteIdioma
+SELECT dem.nombre AS nombre_empresa, AVG(hes.idiomaNivelId) AS nivel_promedio_idioma
+FROM esquemadimensional.hEstudianteIdioma hes
 INNER JOIN (
     SELECT estudianteId, MAX(idiomaNivelId) AS idiomaNivelId
     FROM esquemadimensional.hEstudianteIdioma
     GROUP BY estudianteId
-) AS max_nivel ON hEstudianteIdioma.estudianteId = max_nivel.estudianteId AND hEstudianteIdioma.idiomaNivelId = max_nivel.idiomaNivelId
-INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa ON hEstudianteIdioma.id = dEstudianteIdiomaEmpresa.estudianteIdiomaId
-INNER JOIN esquemadimensional.dEmpresa ON dEstudianteIdiomaEmpresa.empresaId = dEmpresa.id
-GROUP BY dEmpresa.nombre;
+) AS max_nivel ON hes.estudianteId = max_nivel.estudianteId AND hes.idiomaNivelId = max_nivel.idiomaNivelId
+INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa des ON hes.id = des.estudianteIdiomaId
+INNER JOIN esquemadimensional.dEmpresa dem ON des.empresaId = dem.id
+GROUP BY dem.nombre;
 
 -- Nivel promedio de idioma principal por sector 
 
-SELECT dEmpresa.nombreSector AS nombre_sector, AVG(hEstudianteIdioma.idiomaNivelId) AS nivel_promedio_idioma
-FROM esquemadimensional.hEstudianteIdioma
+SELECT dem.nombreSector AS nombre_sector, AVG(hes.idiomaNivelId) AS nivel_promedio_idioma
+FROM esquemadimensional.hEstudianteIdioma hes
 INNER JOIN (
     SELECT estudianteId, MAX(idiomaNivelId) AS idiomaNivelId
     FROM esquemadimensional.hEstudianteIdioma
     GROUP BY estudianteId
-) AS max_nivel ON hEstudianteIdioma.estudianteId = max_nivel.estudianteId AND hEstudianteIdioma.idiomaNivelId = max_nivel.idiomaNivelId
-INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa ON hEstudianteIdioma.id = dEstudianteIdiomaEmpresa.estudianteIdiomaId
-INNER JOIN esquemadimensional.dEmpresa ON dEstudianteIdiomaEmpresa.empresaId = dEmpresa.id
-GROUP BY dEmpresa.nombreSector;
+) AS max_nivel ON hes.estudianteId = max_nivel.estudianteId AND hes.idiomaNivelId = max_nivel.idiomaNivelId
+INNER JOIN esquemadimensional.dEstudianteIdiomaEmpresa des ON hes.id = des.estudianteIdiomaId
+INNER JOIN esquemadimensional.dEmpresa dem ON des.empresaId = dem.id
+GROUP BY dem.nombreSector;
 
 -- Número de idiomas por tipo de carrera
 
-SELECT dCarrera.nombreTipoCarrera AS tipo_carrera, COUNT(DISTINCT hEstudianteIdioma.idiomaId) AS numero_idiomas
-FROM esquemadimensional.hEstudianteIdioma
-INNER JOIN esquemadimensional.dEstudianteIdiomaCarrera ON hEstudianteIdioma.id = dEstudianteIdiomaCarrera.estudianteIdiomaId
-INNER JOIN esquemadimensional.dCarrera ON dEstudianteIdiomaCarrera.carreraId = dCarrera.id
-GROUP BY dCarrera.nombreTipoCarrera;
+SELECT dca.nombreTipoCarrera AS tipo_carrera, COUNT(DISTINCT hes.idiomaId) AS numero_idiomas
+FROM esquemadimensional.hEstudianteIdioma hes
+INNER JOIN esquemadimensional.dEstudianteIdiomaCarrera des ON hes.id = des.estudianteIdiomaId
+INNER JOIN esquemadimensional.dCarrera dca ON des.carreraId = dca.id
+GROUP BY dca.nombreTipoCarrera;
 
 -- Nivel promedio de idioma principal por tipo carrera 
 
-SELECT dCarrera.nombreTipoCarrera AS tipo_carrera, AVG(hEstudianteIdioma.idiomaNivelId) AS nivel_promedio_idioma
-FROM esquemadimensional.hEstudianteIdioma
+SELECT dca.nombreTipoCarrera AS tipo_carrera, AVG(hes.idiomaNivelId) AS nivel_promedio_idioma
+FROM esquemadimensional.hEstudianteIdioma hes
 INNER JOIN (
     SELECT estudianteId, MAX(idiomaNivelId) AS idiomaNivelId
     FROM esquemadimensional.hEstudianteIdioma
     GROUP BY estudianteId
-) AS max_nivel ON hEstudianteIdioma.estudianteId = max_nivel.estudianteId AND hEstudianteIdioma.idiomaNivelId = max_nivel.idiomaNivelId
-INNER JOIN esquemadimensional.dEstudianteIdiomaCarrera ON hEstudianteIdioma.id = dEstudianteIdiomaCarrera.estudianteIdiomaId
-INNER JOIN esquemadimensional.dCarrera ON dEstudianteIdiomaCarrera.carreraId = dCarrera.id
-GROUP BY dCarrera.nombreTipoCarrera;
+) AS max_nivel ON hes.estudianteId = max_nivel.estudianteId AND hes.idiomaNivelId = max_nivel.idiomaNivelId
+INNER JOIN esquemadimensional.dEstudianteIdiomaCarrera des ON hes.id = des.estudianteIdiomaId
+INNER JOIN esquemadimensional.dCarrera dca ON des.carreraId = dca.id
+GROUP BY dca.nombreTipoCarrera;
 
 -- Distribución de nivel por idioma
 
-SELECT dIdioma.nombre AS idioma, dIdiomaNivel.nombre AS nivel, COUNT(hEstudianteIdioma.id) AS cantidad_estudiantes
-FROM esquemadimensional.hEstudianteIdioma
-INNER JOIN esquemadimensional.dIdioma ON hEstudianteIdioma.idiomaId = dIdioma.id
-INNER JOIN esquemadimensional.dIdiomaNivel ON hEstudianteIdioma.idiomaNivelId = dIdiomaNivel.id
-GROUP BY dIdioma.nombre, dIdiomaNivel.nombre;
+SELECT did.nombre AS idioma, din.nombre AS nivel, COUNT(hes.id) AS cantidad_estudiantes
+FROM esquemadimensional.hEstudianteIdioma hes
+INNER JOIN esquemadimensional.dIdioma did ON hes.idiomaId = did.id
+INNER JOIN esquemadimensional.dIdiomaNivel din ON hes.idiomaNivelId = din.id
+GROUP BY did.nombre, din.nombre;
