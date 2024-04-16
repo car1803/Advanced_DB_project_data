@@ -5,5 +5,6 @@ connection = psycopg2.connect(
     host=postgresCredentials["host"],
     database=postgresCredentials["database"],
     user=postgresCredentials["user"],
-    password=postgresCredentials["password"]
+    password=postgresCredentials["password"],
+    port=postgresCredentials["port"]
 )

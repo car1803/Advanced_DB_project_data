@@ -18,7 +18,7 @@ def create_schema(schema):
     print("Creando esquema esquema "+schema+"...")
 
     cursor.execute(f'''
-        CREATE SCHEMA IF NOT EXISTS {schema} AUTHORIZATION cloudsqlsuperuser;
+        CREATE SCHEMA IF NOT EXISTS {schema};
     ''')
 
     print("Esquema creado.")
