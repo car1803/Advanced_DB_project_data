@@ -1,5 +1,5 @@
 import psycopg2
-from src.connectors.postgresqlcredenciales import postgresCredentials
+from src.connectors.postgresql.postgresqlcredenciales import postgresCredentials
 
 connection = psycopg2.connect(
     host=postgresCredentials["host"],

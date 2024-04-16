@@ -1,5 +1,5 @@
-from src.datos.modeloRelacional import execute_script, execute_script_by_steps, create_schema, drop_schema, set_schema
-from src.connectors.connection import connection
+from src.datos.postgresql.modeloRelacional import execute_script, execute_script_by_steps, create_schema, drop_schema, set_schema
+from src.connectors.postgresql.connection import connection
 
 esquemadimesional = "esquemaDimensional"
 nombremodelo = "modeloDimensional"

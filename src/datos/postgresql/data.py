@@ -1,6 +1,6 @@
-from src.connectors.connection import connection
+from src.connectors.postgresql.connection import connection
 from src.utils.taskexcec import taskInsert
-from src.datos.generadoresDatos import taskEstudianteIdioma, taskInstitucionExterna, taskCarrera, taskDepartamento, taskFacultad, taskEgresado,taskInstitucionExterna, taskPais,taskIdioma, taskIdiomaNivel, taskDocumento, taskEstudiante, taskTipoCarrera, taskSede, taskEducacionExterna, taskSector, taskTipoEmpresa, taskEmpresa, taskTrabajoEstudiante, taskTrabajoEstudianteSalario
+from src.datos.postgresql.generadoresDatos import taskEstudianteIdioma, taskInstitucionExterna, taskCarrera, taskDepartamento, taskFacultad, taskEgresado,taskInstitucionExterna, taskPais,taskIdioma, taskIdiomaNivel, taskDocumento, taskEstudiante, taskTipoCarrera, taskSede, taskEducacionExterna, taskSector, taskTipoEmpresa, taskEmpresa, taskTrabajoEstudiante, taskTrabajoEstudianteSalario
 
 cursor = connection.cursor()
 

@@ -1,4 +1,4 @@
-from src.connectors.connection import connection
+from src.connectors.postgresql.connection import connection
 
 def drop_schema(schema):
     cursor = connection.cursor()
@@ -43,7 +43,7 @@ def execute_script(migration_file):
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
     directorio_script = os.path.dirname(ruta_script) 
     print(directorio_script)
-    ruta_archivo = directorio_script + f'\\migrations\\{migration_file}.sql'
+    ruta_archivo = directorio_script + f'\\..\\migrations\\{migration_file}.sql'
     print(ruta_archivo)
         # Leer el contenido del archivo
     with open(ruta_archivo, "r", encoding="utf-8") as archivo:
@@ -62,7 +62,7 @@ def execute_script_by_steps(migration_file):
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
     directorio_script = os.path.dirname(ruta_script) 
     print(directorio_script)
-    ruta_archivo = directorio_script + f'\\migrations\\{migration_file}.sql'
+    ruta_archivo = directorio_script + f'\\..\\migrations\\{migration_file}.sql'
     print(ruta_archivo)
         # Leer el contenido del archivo
     with open(ruta_archivo, "r", encoding="utf-8") as archivo:
