@@ -31,8 +31,22 @@ POSTGRES_DATABASE=egresados
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
 ```
-Para montar postgres en docker.
+### Para montar postgres en docker.
 
 ```
 docker-compose -f .\postgres\docker-compose.yaml up -d
 ```
+
+### Para montar mongo en docker
+
+```
+docker-compose -f .\mongoDB\docker-compose.yaml up -d
+```
+
+luego para añadir los shards al servidor de configuracion ejecute __sin eso no sirve__.
+
+```
+cd .\mongoDB\
+python3 .\configurar_sharding.py
+```
+__Nota__: hay que configurar el sharding una vez poblada o antes de poblar la db.

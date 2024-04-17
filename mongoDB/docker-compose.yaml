@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  # Servidor de configuración
+  configsvr:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: configsvr
+    volumes:
+      - "./configsvr-data:/data/db"
+    command: mongod --replSet rs-config-server --configsvr --port 27017
+
+  # Shards
+  shard1a:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard1a
+    volumes:
+      - "./shard1a-data:/data/db"
+    command: mongod --shardsvr --replSet shard1
+  shard1b:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard1b
+    volumes:
+      - "./shard1b-data:/data/db"
+    command: mongod --shardsvr --replSet shard1 
+
+  # Mongos
+  mongos:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./mongos-data:/data/db"
+    command: mongos --configdb rs-config-server/configsvr:27017 --port 27017 --bind_ip_all
+    depends_on:
+      - configsvr
+  
