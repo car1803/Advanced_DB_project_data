@@ -8,10 +8,6 @@ o simplemente
 
 ```pip install -r requirements.txt ```
 
-no olvidar ejecutar
-
-```pip install python-dotenv```
-
 *para trabajar con virtualenv*
 
 ```pip install virtualenv ```
