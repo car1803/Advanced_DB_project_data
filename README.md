@@ -42,6 +42,8 @@ POSTGRES_PASSWORD=admin
 docker-compose -f .\postgres\docker-compose.yaml up -d
 ```
 
+segun las credenciales que hemos definido en el docker-compose.yaml hacemos la coneccion con dbeaver
+
 ### Para montar mongo en docker
 
 ```
