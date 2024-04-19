@@ -28,6 +28,8 @@ POSTGRES_PORT=5433
 POSTGRES_DATABASE=egresados
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
+MONGODB_URI=mongodb+srv://<client>:<pasword>@cluster0.t1opyro.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+MONGODB_DATABASE=egresados
 ```
 ### Para montar postgres en docker.
 
@@ -57,3 +59,13 @@ cd .\mongoDB\
 python3 .\configurar_sharding.py
 ```
 __Nota__: hay que configurar el sharding una vez poblada o antes de poblar la db.
+
+### migrar datos a docker
+es recomendable ejecutar primero recordar tener el docker corriendo
+```
+python .\test_postgres-mongo_connection.py
+```
+ejecutar (aun no esta listo)
+```
+python .\etl_Mongo.py
+```
