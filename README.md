@@ -14,6 +14,10 @@ o simplemente
 ```virtualenv egresadosenv ```
 ```.\egresadosenv\Scripts\Activate ```
 
+*En caso de que el ultimo codigo falle:*
+```set "VIRTUAL_ENV=.\egresadosenv" ```
+```set "PATH=%VIRTUAL_ENV%\Scripts;%PATH%" ```
+
 # Ejecución:
 
 Ejecutar los archivos crearEsquemaRelacionalYpoblarlo y pycrearEsquemaDimensionalyPoblarlo.py, estos archivos generan el esquema relacional, el dimensional y generan los datos ficticios en el relacional y ejecutan el etl al relacional.
