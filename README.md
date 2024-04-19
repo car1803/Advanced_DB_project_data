@@ -57,7 +57,7 @@ python3 .\configurar_sharding.py
 __Nota__: hay que configurar el sharding una vez poblada o antes de poblar la db.
 
 ### migrar datos a docker
-es recomendable ejecutar primero recordar tener el docker corriendo
+es recomendable ejecutar primero el siguiente codigo, recordar tener el docker corriendo
 ```
 python .\test_postgres-mongo_connection.py
 ```

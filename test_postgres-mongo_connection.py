@@ -24,11 +24,13 @@ def connect_to_mongodb():
     try:
         client = MongoClient(os.getenv("MONGODB_URI"))
         db = client[os.getenv("MONGODB_DATABASE")]
-        collection_names = db.list_collection_names()
-        if collection_names:
-            print("Conexión exitosa a MongoDB.")
-        else:
-            print("No hay colecciones en la base de datos MongoDB.")
+        print("Conexión exitosa a MongoDB.")
+        # # Insertar datos en la colección de MongoDB
+        # collection = db["nombre_de_la_coleccion"]  # Reemplaza "nombre_de_la_coleccion" por el nombre de tu colección
+        # # Supongamos que tienes datos en forma de diccionarios llamados data_list
+        # data_list = [{"campo1": "valor1"}, {"campo2": "valor2"}]  # Ejemplo de datos a insertar
+        # collection.insert_many(data_list)
+        # print("Datos insertados en la colección de MongoDB.")
         client.close()
     except Exception as e:
         print("Error al conectar a MongoDB:", e)
