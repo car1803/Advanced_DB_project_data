@@ -15,6 +15,7 @@ o simplemente
 ```.\egresadosenv\Scripts\Activate ```
 
 *En caso de que el ultimo codigo falle:*
+
 ```set "VIRTUAL_ENV=.\egresadosenv" ```
 ```set "PATH=%VIRTUAL_ENV%\Scripts;%PATH%" ```
 
