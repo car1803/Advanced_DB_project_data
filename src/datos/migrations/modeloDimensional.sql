@@ -45,7 +45,8 @@ create table dEmpresa (
 	correo varchar(255) not null, 
 	web varchar(255), 
 	nombreSector varchar(255) not null, 
-	nombreTipo varchar(255) not null
+	nombreTipo varchar(255) not null,
+    descripcion varchar(1000) not null
 );
 
 create table dCarrera (
@@ -107,6 +108,7 @@ create table hEmpresa (
     gastoEnSalariosTotal float not null, 
     numeroDeEmpleadosTotal int not null, 
     numerodeEmpleadosActual int not null,
+    descripcion varchar(1000) not null,
     foreign key (sectorId) references dSector(id),
     foreign key (tipoEmpresaId) references dTipoEmpresa(id)
 );

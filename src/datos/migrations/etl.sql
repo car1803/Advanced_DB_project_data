@@ -28,8 +28,8 @@ JOIN esquemarelacional.departamento ON carrera.departamentoId = departamento.id
 JOIN esquemarelacional.facultad ON departamento.facultadId = facultad.id
 JOIN esquemarelacional.sede ON facultad.sedeId = sede.id;
 
-INSERT INTO esquemadimensional.dEmpresa (id, nombre, correo, web, nombreSector, nombreTipo)
-SELECT esquemarelacional.empresa.id, esquemarelacional.empresa.nombre, esquemarelacional.empresa.correo, esquemarelacional.empresa.web, esquemarelacional.sector.nombre AS nombreSector, esquemarelacional.tipoEmpresa.nombre AS nombreTipo
+INSERT INTO esquemadimensional.dEmpresa (id, nombre, correo, web, nombreSector, nombreTipo, descripcion)
+SELECT esquemarelacional.empresa.id, esquemarelacional.empresa.nombre, esquemarelacional.empresa.correo, esquemarelacional.empresa.web, esquemarelacional.sector.nombre AS nombreSector, esquemarelacional.tipoEmpresa.nombre AS nombreTipo, esquemarelacional.empresa.descripcion
 FROM esquemarelacional.empresa
 JOIN esquemarelacional.sector ON empresa.sectorId = sector.id
 JOIN esquemarelacional.tipoEmpresa ON empresa.tipoEmpresaId = tipoEmpresa.id;
@@ -63,7 +63,7 @@ SELECT id, nombre FROM  esquemarelacional.idiomaNivel;
 INSERT INTO esquemadimensional.hEstudianteIdioma (idiomaId, idiomaNivelId, estudianteId)
 SELECT idiomaId, idiomaNivelId, estudianteId FROM esquemarelacional.estudianteIdioma;
 
-INSERT INTO esquemadimensional.hEmpresa (id, nombre, correo, web, tipoEmpresaId, sectorId, gastoEnSalariosTotal, numeroDeEmpleadosTotal, numerodeEmpleadosActual)
+INSERT INTO esquemadimensional.hEmpresa (id, nombre, correo, web, tipoEmpresaId, sectorId, gastoEnSalariosTotal, numeroDeEmpleadosTotal, numerodeEmpleadosActual, descripcion)
 SELECT
     id,
     nombre,
@@ -73,7 +73,8 @@ SELECT
     sectorId,
     0 AS gastoensalariostotal,
     0 as numeroDeEmpleadosTotal,
-    0 as numerodeEmpleadosActual
+    0 as numerodeEmpleadosActual,
+    descripcion
 FROM esquemarelacional.empresa;
 
 UPDATE esquemadimensional.hEmpresa h
