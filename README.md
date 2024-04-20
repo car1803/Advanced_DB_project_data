@@ -35,6 +35,13 @@ docker-compose -f .\docker\docker-compose.yaml up -d
 ```
 Nota: solo es necesario ejecutar lo una vez
 
+Ejecutar el siguiente comando cada vez que se apaguen y se prendan los contenedores:
+
+```
+cd .\docker\
+python3 .\configurar_sharding.py
+```
+
 ### Migrar postgres en docker.
 
 Ejecutar los archivos crearEsquemaRelacionalYpoblarlo y pycrearEsquemaDimensionalyPoblarlo.py, estos archivos generan el esquema relacional, el dimensional y generan los datos ficticios en el relacional y ejecutan el etl al relacional.
