@@ -4,4 +4,6 @@ prueba.py
 .env
 /postgres/pgdata/
 /egresadosenv/
-/mongoDB/*/
+/docker/*/
+/datos/postgresql/__pycache__/
+/connectors/postgresql/__pycache__/
