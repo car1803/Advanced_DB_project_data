@@ -142,6 +142,7 @@ create table empresa (
 	web varchar(255),  
 	tipoEmpresaId int not null, 
 	sectorId int not null, 
+	descripcion varchar(1000) not null,
 	foreign key (tipoEmpresaId) references tipoEmpresa (id), 
 	foreign key (sectorId) references sector (id)
 ); 

@@ -123,10 +123,11 @@ def taskEmpresa(___, volumen):
     web_empresa = fake.url()
     tipo_empresa_id = fake.random_int(min=1, max=2) 
     sector_empresa_id = fake.random_int(min=1, max=8)
-    return f'''
-        INSERT INTO empresa (nombre, correo, web, tipoEmpresaId, sectorId)
-        VALUES ('{nombre_empresa}', '{correo_empresa}', '{web_empresa}', {tipo_empresa_id}, {sector_empresa_id});
-    '''
+    descripcion = fake.text(max_nb_chars=1000)
+    return '''
+        INSERT INTO empresa (nombre, correo, web, tipoEmpresaId, sectorId, descripcion)
+        VALUES ('{nombre_empresa}', '{correo_empresa}', '{web_empresa}', {tipo_empresa_id}, {sector_empresa_id}, '{descripcion}');
+    '''.format(nombre_empresa=nombre_empresa.replace("'", "''"), correo_empresa=correo_empresa, web_empresa=web_empresa, tipo_empresa_id=tipo_empresa_id, sector_empresa_id=sector_empresa_id, descripcion=descripcion.replace("'", "''"))
 
 
 trabajos = [
