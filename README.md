@@ -71,6 +71,7 @@ segun las credenciales que hemos definido en el docker-compose.yaml hacemos la c
 - Seleccionar Start with a recommended MongoDB schema y solo las tablas de hechos
 - Seleccionamos Crear migration job y en la coneccion de destino, escoger la opcionde uri y poner mongodb://docker-mongos-1:27017/egresados
 - Ahora en mongoDB compass nos conectamos al mongodb://localhost:27017
+- (En caso tal de que ya tengamos el etl, importamos este de src/datos/migrations)
 
 ### bajar los contenedores
 ```
