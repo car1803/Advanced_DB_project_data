@@ -37,7 +37,7 @@ services:
     command: mongod --shardsvr --replSet shard1
     networks:
       - egresados-network
-      
+
   shard1b:
     image:  mongo:6.0.1
     restart: unless-stopped
@@ -67,7 +67,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./data:/data  
+      - ./data-migrator:/root/Migrator 
     networks:
       - egresados-network
 
