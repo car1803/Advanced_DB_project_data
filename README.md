@@ -24,8 +24,6 @@ POSTGRES_PORT=5433
 POSTGRES_DATABASE=egresados
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
-MONGODB_URI=mongodb+srv://<client>:<pasword>@cluster0.t1opyro.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-MONGODB_DATABASE=egresados
 ```
 
 ## Para montar todos los contenedores de docker
@@ -35,12 +33,20 @@ docker-compose -f .\docker\docker-compose.yaml up -d
 ```
 Nota: solo es necesario ejecutar lo una vez
 
-Ejecutar el siguiente comando cada vez que se apaguen y se prendan los contenedores:
+Iniciar los contenedores
+
+```
+cd .\docker\
+docker-compose.exe up -d
+```
+
+Ejecutar el siguiente comando cada vez que se apaguen y se prendan los contenedores, deben aparecer dos json para confirmar que este bien:
 
 ```
 cd .\docker\
 python3 .\configurar_sharding.py
 ```
+__Nota__: hay que configurar el sharding una vez poblada o antes de poblar la db.
 
 ### Migrar postgres en docker.
 
@@ -53,26 +59,21 @@ python .\crearEsquemaDimensionalyPoblarlo.py
 
 segun las credenciales que hemos definido en el docker-compose.yaml hacemos la coneccion con dbeaver
 
-### Para montar mongo en docker
+### Migrar con MongoRM
+- Posicionandonos en el contenedor docker, abrimos el contenedor mongoRM que esta corriendo en el puerto 8080
+- Nos conectamos a una base de datos poniendo los valores
+    1) type: postgreSQL
+    2) host: postgres_db
+    3) port: 5432
+    4) database: egresados
+    5) credenciales: admin
+- Seleccionamos el esquemadimensional y todas las tablas
+- Seleccionar Start with a recommended MongoDB schema y solo las tablas de hechos
+- Seleccionamos Crear migration job y en la coneccion de destino, escoger la opcionde uri y poner mongodb://docker-mongos-1:27017/egresados
+- Ahora en mongoDB compass nos conectamos al mongodb://localhost:27017
 
-Añadir los shards al servidor de configuracion ejecute __sin eso no sirve__.
-
+### bajar los contenedores
 ```
 cd .\docker\
-python3 .\configurar_sharding.py
+docker-compose.exe down
 ```
-__Nota__: hay que configurar el sharding una vez poblada o antes de poblar la db.
-
-### migrar datos a docker
-es recomendable ejecutar primero el siguiente codigo, recordar tener el docker corriendo
-```
-python .\test_postgres-mongo_connection.py
-```
-ejecutar (aun no esta listo)
-```
-python .\etl_Mongo.py
-```
-
-### Migrar con MongoMR
-
-Primero corra con docker el mongoMR
