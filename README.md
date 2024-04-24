@@ -3,6 +3,8 @@
 
 ```pip install faker ```
 ```pip install psycopg2-binary```
+```pip install pymongo```
+
 
 o simplemente
 
@@ -73,7 +75,14 @@ segun las credenciales que hemos definido en el docker-compose.yaml hacemos la c
 - Ahora en mongoDB compass nos conectamos al mongodb://localhost:27017
 - (En caso tal de que ya tengamos el etl, importamos este de src/datos/migrations)
 
-### bajar los contenedores
+### Ejecutar los mapreducers
+Ingresar a la carpeta de cada colección de hechos en src/datos/mapreducers/x y ejecutar 
+```
+python3 mapreducers.py
+```
+Verificar en mongo compass las colecciones creadas.
+
+### Bajar los contenedores
 ```
 cd .\docker\
 docker-compose.exe down
