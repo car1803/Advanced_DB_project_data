@@ -1,4 +1,5 @@
 from src.connectors.postgresql.connection import connection
+import os
 
 def drop_schema(schema):
     cursor = connection.cursor()
@@ -37,15 +38,11 @@ def set_schema(schema):
     connection.commit()
 
 def execute_script(migration_file):
-    import os
-
-    print("Ejecutando Scripot con el archivo de migración...", migration_file)
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    directorio_script = os.path.dirname(ruta_script) 
-    print(directorio_script)
-    ruta_archivo = directorio_script + f'\\..\\migrations\\{migration_file}.sql'
-    print(ruta_archivo)
-        # Leer el contenido del archivo
+    print("Ejecutando Script con el archivo de migración...", migration_file)
+    directorio_script = os.path.dirname(os.path.abspath(__file__))
+    directorio_migraciones = os.path.join(directorio_script, "..", "migrations")
+    ruta_archivo = os.path.join(directorio_migraciones, f"{migration_file}.sql")
+    print("Ruta del archivo:", ruta_archivo)
     with open(ruta_archivo, "r", encoding="utf-8") as archivo:
         contenido = archivo.read()
         cursor = connection.cursor()
@@ -56,27 +53,23 @@ def execute_script(migration_file):
     connection.commit()
 
 def execute_script_by_steps(migration_file):
-    import os
-
-    print("Ejecutando Scripot con el archivo de migración...", migration_file)
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    directorio_script = os.path.dirname(ruta_script) 
-    print(directorio_script)
-    ruta_archivo = directorio_script + f'\\..\\migrations\\{migration_file}.sql'
-    print(ruta_archivo)
-        # Leer el contenido del archivo
+    print("Ejecutando Script por pasos con el archivo de migración...", migration_file)
+    directorio_script = os.path.dirname(os.path.abspath(__file__))
+    directorio_migraciones = os.path.join(directorio_script, "..", "migrations")
+    ruta_archivo = os.path.join(directorio_migraciones, f"{migration_file}.sql")
+    print("Ruta del archivo:", ruta_archivo)
     with open(ruta_archivo, "r", encoding="utf-8") as archivo:
         contenido = archivo.read()
         queries = contenido.split(';')
+        cursor = connection.cursor()
         for query in queries:
-            cursor = connection.cursor()
+            query = query.strip()
+            if not query:
+                continue 
             print("Ejecutando script...")
             print(query)
-            if query.strip() == '':
-                continue
             cursor.execute(query)
             connection.commit()
             print("Hecho...")
-
     print("Proceso Finalizado.")
     connection.commit()
