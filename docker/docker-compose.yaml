@@ -71,6 +71,16 @@ services:
     networks:
       - egresados-network
 
+  # Metabase
+  metabase: 
+    image: metabase/metabase
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./metabase-data:/metabase-data
+    networks:
+      - egresados-network
+
 networks:
   egresados-network:
     name: egresados-network

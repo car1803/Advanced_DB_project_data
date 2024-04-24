@@ -82,6 +82,9 @@ python3 mapreducers.py
 ```
 Verificar en mongo compass las colecciones creadas.
 
+### Metabase
+Ingresar a localhost:3000, loguearse y conectar la base de datos mongo (mongodb://docker-mongos-1:27017/egresados)
+
 ### Bajar los contenedores
 ```
 cd .\docker\
