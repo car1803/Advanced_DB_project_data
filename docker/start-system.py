@@ -1,6 +1,13 @@
 import subprocess
+import time
 
 def execute_command(service, command, port):
+    print("Iniciando docker-compose...")
+    subprocess.run(["docker-compose", "up", "-d"])
+
+    print("Esperando 10 segundos para iniciar os serviços...")
+    time.sleep(10)
+    
     subprocess.run(["docker-compose", "exec", service, "mongosh", f'--port={port}', "--eval", command])
 
 def main():

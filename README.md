@@ -28,7 +28,14 @@ POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
 ```
 
-## Para montar todos los contenedores de docker
+## Para montar todos los contenedores de docker NUEVO
+
+```
+cd .\docker\
+python .\start-system.py
+```
+
+## Para montar todos los contenedores de docker (Método viejo)
 
 ```
 docker-compose -f .\docker\docker-compose.yaml up -d
