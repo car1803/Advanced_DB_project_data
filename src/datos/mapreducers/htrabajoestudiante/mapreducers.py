@@ -19,10 +19,40 @@ result_1 = collection.aggregate(pipeline_1)
 
 # Agregación 2: Contar la cantidad de personas por género y por sector
 pipeline_2 = [
-    {"$group": {"_id": {"genero": "$destudiante.genero", "sector": "$dempresa.nombresector"}, "cantidad_personas": {"$sum": 1}}}, # Mapeo en el group, reduce en el sum
-    {"$out": "cantidad_personas_por_genero_y_sector"}  # Guardar resultado en colección
+    {
+        "$group": {
+            "_id": {
+                "sector": "$dempresa.nombresector",
+                "genero": "$destudiante.genero"
+            },
+            "cantidad_personas": {"$sum": 1}
+        }
+    },
+    {
+        "$group": {
+            "_id": "$_id.sector",
+            "cantidad_mujeres": {
+                "$sum": {
+                    "$cond": [
+                        {"$eq": ["$_id.genero", "F"]},
+                        "$cantidad_personas",
+                        0
+                    ]
+                }
+            },
+            "cantidad_hombres": {
+                "$sum": {
+                    "$cond": [
+                        {"$eq": ["$_id.genero", "M"]},
+                        "$cantidad_personas",
+                        0
+                    ]
+                }
+            }
+        }
+    },
+    {"$out": "cantidad_personas_por_genero_y_sector"}
 ]
-result_2 = collection.aggregate(pipeline_2)
 
 # Agregación 3: Encontrar las palabras más comunes en los cargos
 pipeline_3 = [
