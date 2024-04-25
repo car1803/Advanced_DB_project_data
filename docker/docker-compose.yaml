@@ -77,7 +77,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./metabase-data:/metabase-data
+      - ./metabase.db:/metabase.db
     networks:
       - egresados-network
 
