@@ -25,7 +25,7 @@ pipeline_2 = [
                 "sector": "$dempresa.nombresector",
                 "genero": "$destudiante.genero"
             },
-            "cantidad_personas": {"$sum": 1}
+            "count": {"$sum": 1}
         }
     },
     {
@@ -35,7 +35,7 @@ pipeline_2 = [
                 "$sum": {
                     "$cond": [
                         {"$eq": ["$_id.genero", "F"]},
-                        "$cantidad_personas",
+                        "$count",
                         0
                     ]
                 }
@@ -44,7 +44,7 @@ pipeline_2 = [
                 "$sum": {
                     "$cond": [
                         {"$eq": ["$_id.genero", "M"]},
-                        "$cantidad_personas",
+                        "$count",
                         0
                     ]
                 }
