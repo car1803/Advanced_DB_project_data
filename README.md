@@ -82,25 +82,6 @@ segun las credenciales que hemos definido en el docker-compose.yaml hacemos la c
 - Ahora en mongoDB compass nos conectamos al mongodb://localhost:27017
 - (En caso tal de que ya tengamos el etl, importamos este de src/datos/migrations)
 
-### Crear varios chunks
-
-_Nota: por defecto se está haciendo sharding con respecto a un id autogenerado en cada una de las colecciones._
-
-Los comandos de esta sección requieren que haga primero _**use egresados**_
-
-Puede hacer manualmente la división de los chunks de mongo db con el siguiente comando
-
-```
-sh.splitFind("egresados.<nombre_coleccion>",{id: <un_id_dentro_del_shard>})
-```
-Este comando hará un split en 2 automáticamente en el chunk que contenga el id _**<un_id_dentro_del_shard>**_
-
-Para consultar el proceso de particion puede hacer:
-
-```
-db.<nombre_coleccion>.getShardDistribution()
-```
-
 ### Ejecutar los mapreducers
 Ingresar a la carpeta de cada colección de hechos en src/datos/mapreducers/x y ejecutar 
 ```
