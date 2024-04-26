@@ -23,11 +23,12 @@ services:
     hostname: configsvr
     volumes:
       - "./configsvr-data:/data/db"
+      - "./configsvr-data-db:/data/configdb"
     command: mongod --replSet rs-config-server --configsvr --port 27017
     networks:
       - egresados-network
 
-  # Shards
+  # Shard1
   shard1a:
     image:  mongo:6.0.1
     restart: unless-stopped
@@ -45,6 +46,27 @@ services:
     volumes:
       - "./shard1b-data:/data/db"
     command: mongod --shardsvr --replSet shard1 
+    networks:
+      - egresados-network
+
+  # Shard2
+  shard2a:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard2a
+    volumes:
+      - "./shard2a-data:/data/db"
+    command: mongod --shardsvr --replSet shard2
+    networks:
+      - egresados-network
+
+  shard2b:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard2b
+    volumes:
+      - "./shard2b-data:/data/db"
+    command: mongod --shardsvr --replSet shard2
     networks:
       - egresados-network
 
