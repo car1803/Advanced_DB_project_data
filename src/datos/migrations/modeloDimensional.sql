@@ -1,9 +1,9 @@
 drop table if exists dTrabajoEstudianteCarrera;
 drop table if exists dEmpresaCarrera;
 drop table if exists dEstudianteIdiomaEmpresa; 
-drop table if exists hTrabajoEstudiante;
-drop table if exists hEmpresa; 
-drop table if exists hEstudianteIdioma;
+drop table if exists hregistrotrabajo;
+drop table if exists hregistroempresa; 
+drop table if exists hregistroestudioidioma;
 drop table if exists dTiempo;
 drop table if exists dEstudiante;
 drop table if exists dEmpresa;
@@ -58,7 +58,7 @@ create table dCarrera (
 	nombreSede varchar(255) not null
 );
 
-create table hTrabajoEstudiante (
+create table hregistrotrabajo (
 	id serial primary key, 
 	fechaInicioId int not null, 
 	fechaFinId int, 
@@ -79,7 +79,7 @@ create table dTrabajoEstudianteCarrera (
     trabajoEstudianteId int not null,
     carreraId int not null,
     primary key (trabajoEstudianteId, carreraId),
-    foreign key (trabajoEstudianteId) references hTrabajoEstudiante(id),
+    foreign key (trabajoEstudianteId) references hregistrotrabajo(id),
     foreign key (carreraId) references dCarrera(id)
 );
 
@@ -98,7 +98,7 @@ create table dTipoEmpresa (
 	nombre varchar(255) not null
 ); 
 
-create table hEmpresa (
+create table hregistroempresa (
 	id serial primary key,
 	nombre varchar(255) not null, 
 	correo varchar(255), 
@@ -117,7 +117,7 @@ create table dEmpresaCarrera (
     empresaId int not null,
     carreraId int not null,
     primary key (empresaId, carreraId),
-    foreign key (empresaId) references hEmpresa(id),
+    foreign key (empresaId) references hregistroempresa(id),
     foreign key (carreraId) references dCarrera(id)
 );
 
@@ -136,7 +136,7 @@ create table dIdiomaNivel (
 	nombre varchar(255) not null
 ); 
 
-create table hEstudianteIdioma (
+create table hregistroestudioidioma (
 	id serial primary key,
 	idiomaId int not null,
     idiomaNivelId int not null,
@@ -151,7 +151,7 @@ create table dEstudianteIdiomaEmpresa (
     empresaId int not null,
     primary key (empresaId, estudianteIdiomaId),
     foreign key (empresaId) references dEmpresa(id),
-    foreign key (estudianteIdiomaId) references hEstudianteIdioma(id)
+    foreign key (estudianteIdiomaId) references hregistroestudioidioma(id)
 );
 
 create table dEstudianteIdiomaCarrera (
@@ -159,7 +159,7 @@ create table dEstudianteIdiomaCarrera (
     carreraId int not null,
     primary key (carreraId, estudianteIdiomaId),
     foreign key (carreraId) references dCarrera(id),
-    foreign key (estudianteIdiomaId) references hEstudianteIdioma(id)
+    foreign key (estudianteIdiomaId) references hregistroestudioidioma(id)
 );
 
 -- hechoCarrera o cúal otro 

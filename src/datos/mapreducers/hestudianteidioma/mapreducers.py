@@ -3,7 +3,7 @@ from pymongo import MongoClient
 # Conexión a la base de datos MongoDB
 client = MongoClient('localhost', 27017)
 db = client['egresados']
-collection = db['hestudianteidioma']
+collection = db['hregistroestudioidioma']
 
 # Eliminar colecciones existentes
 db['cantidad_estudiantes_por_idioma'].drop()

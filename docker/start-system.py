@@ -26,9 +26,9 @@ def main():
 
     print("configurando colecciones ","-" * 40)
     execute_command("mongos", 'sh.enableSharding("egresados")', 27017)
-    execute_command("mongos", 'sh.shardCollection("egresados.htrabajoestudiante", {"id": 1})', 27017)
-    execute_command("mongos", 'sh.shardCollection("egresados.hestudianteidioma", {"id": 1})', 27017)
-    execute_command("mongos", 'sh.shardCollection("egresados.hempresa", {"id": 1})', 27017)
+    execute_command("mongos", 'sh.shardCollection("egresados.hregistrotrabajo", {"id": 1})', 27017)
+    execute_command("mongos", 'sh.shardCollection("egresados.hregistroestudioidioma", {"id": 1})', 27017)
+    execute_command("mongos", 'sh.shardCollection("egresados.hregistroempresa", {"id": 1})', 27017)
 
 if __name__ == "__main__":
     ruta_actual = os.getcwd()

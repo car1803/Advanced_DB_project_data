@@ -34,7 +34,7 @@ FROM esquemarelacional.empresa
 JOIN esquemarelacional.sector ON empresa.sectorId = sector.id
 JOIN esquemarelacional.tipoEmpresa ON empresa.tipoEmpresaId = tipoEmpresa.id;
 
-INSERT INTO esquemadimensional.hTrabajoEstudiante (fechaInicioId, fechaFinId, orden, cargo, añosExperienciaPrevia, salarioPromedio, ofertaSie, estudianteId, empresaId)
+INSERT INTO esquemadimensional.hregistrotrabajo (fechaInicioId, fechaFinId, orden, cargo, añosExperienciaPrevia, salarioPromedio, ofertaSie, estudianteId, empresaId)
 SELECT ti.id, tf.id, te.orden, te.cargo, te.añosExperienciaPrevia, AVG(tes.salario) AS salarioPromedio, te.ofertaSie, te.estudianteId, te.empresaId
 FROM esquemarelacional.trabajoEstudiante te
 JOIN esquemarelacional.trabajoEstudianteSalario tes ON te.id = tes.trabajoEstudianteId
@@ -44,7 +44,7 @@ GROUP BY te.id, ti.id, tf.id, te.orden, te.cargo, te.añosExperienciaPrevia, te.
 
 INSERT INTO esquemadimensional.dTrabajoEstudianteCarrera (trabajoEstudianteId, carreraId)
 SELECT distinct hte.id AS trabajoEstudianteId, ee.carreraId
-FROM esquemadimensional.hTrabajoEstudiante hte
+FROM esquemadimensional.hregistrotrabajo hte
 JOIN esquemarelacional.estudiante e ON e.id = hte.estudianteid 
 JOIN esquemarelacional.egresado ee ON ee.estudianteId = e.id;
 
@@ -60,10 +60,10 @@ SELECT id, nombre FROM  esquemarelacional.idioma;
 INSERT INTO esquemadimensional.dIdiomaNivel (id, nombre)
 SELECT id, nombre FROM  esquemarelacional.idiomaNivel;
 
-INSERT INTO esquemadimensional.hEstudianteIdioma (idiomaId, idiomaNivelId, estudianteId)
+INSERT INTO esquemadimensional.hregistroestudioidioma (idiomaId, idiomaNivelId, estudianteId)
 SELECT idiomaId, idiomaNivelId, estudianteId FROM esquemarelacional.estudianteIdioma;
 
-INSERT INTO esquemadimensional.hEmpresa (id, nombre, correo, web, tipoEmpresaId, sectorId, gastoEnSalariosTotal, numeroDeEmpleadosTotal, numerodeEmpleadosActual, descripcion)
+INSERT INTO esquemadimensional.hregistroempresa (id, nombre, correo, web, tipoEmpresaId, sectorId, gastoEnSalariosTotal, numeroDeEmpleadosTotal, numerodeEmpleadosActual, descripcion)
 SELECT
     id,
     nombre,
@@ -77,32 +77,32 @@ SELECT
     descripcion
 FROM esquemarelacional.empresa;
 
-UPDATE esquemadimensional.hEmpresa h
+UPDATE esquemadimensional.hregistroempresa h
 SET gastoensalariostotal = subquery.total_salario
 FROM (
     SELECT h.id, SUM(tes.salario) AS total_salario
-    FROM esquemadimensional.hEmpresa h
+    FROM esquemadimensional.hregistroempresa h
     JOIN esquemarelacional.trabajoEstudiante AS te ON te.empresaId = h.id
     JOIN esquemarelacional.trabajoEstudianteSalario AS tes ON tes.trabajoEstudianteId = te.id
     GROUP BY h.id
 ) AS subquery
 WHERE h.id = subquery.id;
 
-UPDATE esquemadimensional.hEmpresa h
+UPDATE esquemadimensional.hregistroempresa h
 SET numeroDeEmpleadosTotal = subquery.numeroDeEmpleadosTotal
 FROM (
     SELECT h.id, count(te.id) AS numeroDeEmpleadosTotal
-    FROM esquemadimensional.hEmpresa h
+    FROM esquemadimensional.hregistroempresa h
     JOIN esquemarelacional.trabajoEstudiante AS te ON te.empresaId = h.id
     GROUP BY h.id
 ) AS subquery
 WHERE h.id = subquery.id;
 
-UPDATE esquemadimensional.hEmpresa h
+UPDATE esquemadimensional.hregistroempresa h
 SET numerodeEmpleadosActual = subquery.numerodeEmpleadosActual
 FROM (
     SELECT h.id, count(te.id) AS numerodeEmpleadosActual
-    FROM esquemadimensional.hEmpresa h
+    FROM esquemadimensional.hregistroempresa h
     JOIN esquemarelacional.trabajoEstudiante AS te ON te.empresaId = h.id
     WHERE te.fechaFin IS NULL
     GROUP BY h.id
@@ -111,20 +111,20 @@ WHERE h.id = subquery.id;
 
 INSERT INTO esquemadimensional.dEmpresaCarrera (empresaId, carreraId)
 select distinct he.id, ee.carreraId
-FROM esquemadimensional.hEmpresa he 
+FROM esquemadimensional.hregistroempresa he 
 JOIN esquemarelacional.trabajoEstudiante te ON te.empresaId = he.id
 JOIN esquemarelacional.estudiante e ON e.id = te.estudianteid 
 JOIN esquemarelacional.egresado ee ON ee.estudianteId = e.id;
 
 INSERT INTO esquemadimensional.dEstudianteIdiomaEmpresa (estudianteIdiomaId, empresaId)
 SELECT distinct hei.id, te.empresaId
-FROM esquemadimensional.hEstudianteIdioma hei
+FROM esquemadimensional.hregistroestudioidioma hei
 JOIN esquemarelacional.estudiante e ON e.id = hei.estudianteId 
 JOIN esquemarelacional.trabajoEstudiante te on te.estudianteId = e.id;
 
 INSERT INTO esquemadimensional.dEstudianteIdiomaCarrera (estudianteIdiomaId, carreraId)
 SELECT distinct hei.id, ee.carreraId
-FROM esquemadimensional.hEstudianteIdioma hei
+FROM esquemadimensional.hregistroestudioidioma hei
 JOIN esquemarelacional.estudiante e ON e.id = hei.estudianteId 
 JOIN esquemarelacional.egresado ee ON ee.estudianteId = e.id;
 
