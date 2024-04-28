@@ -1,0 +1,3 @@
+import src.datos.mapreducers.hregistroempresa.mapreducers 
+import src.datos.mapreducers.hregistroestudianteidioma.mapreducers
+import src.datos.mapreducers.hregistrotrabajoestudiante.mapreducers
