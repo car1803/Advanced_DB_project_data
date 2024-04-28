@@ -9,6 +9,7 @@ collection = db['hregistroempresa']
 db['empresa_por_tipo'].drop()
 db['promedio_gasto_salarios_por_sector'].drop()
 db['nombre_empresas_mas_frecuente'].drop()
+db['carreras_mas_comunes_en_empresas'].drop()
 
 # Agregación 1: Contar la Cantidad de Empresas por Tipo
 pipeline_1 = [
@@ -33,6 +34,28 @@ pipeline_3 = [
     {"$out": "nombre_empresas_mas_frecuente"}  # Guardar resultado en colección
 ]
 result_3 = collection.aggregate(pipeline_3)
+
+# Agregación 4: Carreras más comunes en las empresas
+pipeline_4 = [
+  { "$unwind": "$dempresacarreras" }, # Descomponer cada carrera en un documento separado
+  {
+    "$group": {
+      "_id": {
+        "nombre": "$dempresacarreras.nombre",
+        "tipo_carrera": "$dempresacarreras.nombretipocarrera",
+        "facultad": "$dempresacarreras.nombrefacultad",
+      },
+      "count": { "$sum": 1 }
+    } # Agrupar por nombre, tipo de carrera y departamento
+  },
+  {
+    "$sort": { "count": -1 } # Ordenar por frecuencia descendente
+  },
+  {
+    "$out": "carreras_mas_comunes_en_empresas"
+  }
+]
+result_4 = collection.aggregate(pipeline_4)
 
 # Cerrar conexión a la base de datos
 client.close()

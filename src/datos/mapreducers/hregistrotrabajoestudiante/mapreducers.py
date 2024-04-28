@@ -53,6 +53,7 @@ pipeline_2 = [
     },
     {"$out": "cantidad_personas_por_genero_y_sector"}
 ]
+result_2 = collection.aggregate(pipeline_2)
 
 # Agregación 3: Encontrar las palabras más comunes en los cargos
 pipeline_3 = [
