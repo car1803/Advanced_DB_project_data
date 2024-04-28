@@ -108,6 +108,12 @@ python3 mapreducers.py
 ```
 Verificar en mongo compass las colecciones creadas.
 
+otra forma es en la ruta base del proyecto ejecutar el comando:
+
+```
+python3 runallmapreducers.py
+```
+
 ### Metabase
 Ingresar a localhost:3000, loguearse y conectar la base de datos mongo (mongodb://docker-mongos-1:27017/egresados)
 
