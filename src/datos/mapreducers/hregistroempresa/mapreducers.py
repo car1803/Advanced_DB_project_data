@@ -41,12 +41,22 @@ pipeline_4 = [
   {
     "$group": {
       "_id": {
-        "nombre": "$dempresacarreras.nombre",
+        "nombre_carrera": "$dempresacarreras.nombre",
         "tipo_carrera": "$dempresacarreras.nombretipocarrera",
         "facultad": "$dempresacarreras.nombrefacultad",
       },
       "count": { "$sum": 1 }
     } # Agrupar por nombre, tipo de carrera y departamento
+  },
+  {
+    "$project": {
+      "nombre": {"$concat" : [ "$_id.tipo_carrera", " - ", "$_id.nombre_carrera", " - ", "$_id.facultad"]}, # Crear un id único para cada carrera
+      "tipo_carrera": "$_id.tipo_carrera",
+      "nombre_carrera": "$_id.nombre_carrera",
+      "facultad": "$_id.facultad",
+      "count": 1,
+      "_id": 0  # Esto elimina el campo _id
+    }
   },
   {
     "$sort": { "count": -1 } # Ordenar por frecuencia descendente
