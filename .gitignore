@@ -8,3 +8,4 @@ prueba.py
 /docker/*/
 /datos/postgresql/__pycache__/
 /connectors/postgresql/__pycache__/
+!/docker/metabase.db/
