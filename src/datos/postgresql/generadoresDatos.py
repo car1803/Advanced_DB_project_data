@@ -4,19 +4,19 @@ import random
 fake = Faker()
 
 def taskPais(i, __):
-    pais = (
-        "Estados Unidos",
-        "Canadá",
-        "México",
-        "Argentina",
-        "Brasil",
-        "Chile",
-        "Colombia",
-        "España",
-        "Francia",
-        "Alemania",
-        "Italia",
-        "Reino Unido"
+    pais = (       
+    "United States",
+    "Canada",
+    "Mexico",
+    "Argentina",
+    "Brazil",
+    "Chile",
+    "Colombia",
+    "Spain",
+    "France",
+    "Germany",
+    "Italy",
+    "United Kingdom"
     )[i % 12]
     return f'''
         INSERT INTO pais (nombre) VALUES ('{pais}');
