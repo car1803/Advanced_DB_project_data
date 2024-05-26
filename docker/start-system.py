@@ -30,6 +30,12 @@ def main():
     execute_command("mongos", 'sh.shardCollection("egresados.hregistroestudioidioma", {"id": 1})', 27017)
     execute_command("mongos", 'sh.shardCollection("egresados.hregistroempresa", {"id": 1})', 27017)
 
+    print("configurando indices de texto ","-" * 40)
+    execute_command("mongos", 'db.hregistrotrabajo.createIndex({"cargo": "text", "destudiante.nombre": "text", "dempresa.descripcion":"text", "dempresa.nombre":"text", "dtrabajoestudiantecarrera.nombrefacultad":"text"},{ default_language: "spanish" })', 27017)
+    execute_command("mongos", 'db.hregistroestudioidioma.createIndex({"destudiante.nombre" : "text", "destudianteidioma.nombrefacultad":"text", "destudianteidioma.nombresede":"text", "destudiante.documento":"text"}, { default_language: "english" })', 27017)
+    execute_command("mongos", 'db.hregistroempresa.createIndex({"nombre": "text", "descripcion": "text", "dempresacarreras.nombrefacultad":"text", "dempresacarreras.nombresede":"text"}, { default_language: "english" })', 27017)
+
+
 if __name__ == "__main__":
     ruta_actual = os.getcwd()
     ruta_completa = os.path.join(ruta_actual, data_server_config)
