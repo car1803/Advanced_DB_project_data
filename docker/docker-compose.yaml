@@ -97,7 +97,7 @@ services:
   metabase: 
     image: metabase/metabase
     ports:
-      - "3000:3000"
+      - "3300:3000"
     volumes:
       - ./metabase.db:/metabase.db
     networks:
