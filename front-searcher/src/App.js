@@ -4,23 +4,21 @@ import Header from './components/headerComponent';
 import Footer from './components/footerComponent';
 import MetabaseComponent from './components/metabaseComponent';
 import SearcherComponent from './components/searcherComponent';
-import { Container, Row } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App d-flex flex-column min-vh-100">
-      <Header />
-      <div className="flex-grow-1">
-        <Container className="text-start">
-          <Row>
-            <SearcherComponent />
-          </Row>
-          <Row>
-            <MetabaseComponent />
-          </Row>
-        </Container>
-      </div>
-      <Footer />
+    <Router>
+        <Header />
+        <div className="flex-grow-1">
+        <Routes>
+            <Route path="/" element={<SearcherComponent />} />
+            <Route path="/metabase" element={<MetabaseComponent />} />
+          </Routes>
+        </div>
+        <Footer />
+    </Router>
     </div>
   );
 }
