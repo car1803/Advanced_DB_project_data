@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/app/components/*"] // Add this line to include the 'components' directory
+    }
+  }
+}
