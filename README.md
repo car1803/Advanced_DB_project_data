@@ -122,3 +122,31 @@ Ingresar a localhost:3000, loguearse y conectar la base de datos mongo (mongodb:
 cd .\docker\
 docker-compose.exe down
 ```
+
+
+
+## FRONTEND
+primero debes instalar [Node.js](https://nodejs.org/en/blog/release/v18.20.2).
+1. Ejecuta el siguiente comando para instalar las dependencias:
+    ```bash
+    cd frontend
+    npm install
+    ```
+2. Inicia el servidor de desarrollo con el comando:
+    ```bash
+    npm start
+    ```
+
+Para obtener más información, consulta el archivo README dentro de la carpeta `frontend`.
+
+## BACKEND
+
+1. Ejecuta el siguiente comando para instalar las dependencias:
+    ```bash
+    cd backend
+    npm install
+    ```
+2. Inicia el servidor con el siguiente comando:
+    ```bash
+    npm run server
+    ```
