@@ -123,7 +123,17 @@ cd .\docker\
 docker-compose.exe down
 ```
 
+## BACKEND
 
+1. Ejecuta el siguiente comando para instalar las dependencias:
+    ```bash
+    cd backend
+    npm install
+    ```
+2. Inicia el servidor con el siguiente comando:
+    ```bash
+    npm run server
+    ```
 
 ## FRONTEND
 primero debes instalar [Node.js](https://nodejs.org/en/blog/release/v18.20.2).
@@ -139,14 +149,5 @@ primero debes instalar [Node.js](https://nodejs.org/en/blog/release/v18.20.2).
 
 Para obtener más información, consulta el archivo README dentro de la carpeta `frontend`.
 
-## BACKEND
-
-1. Ejecuta el siguiente comando para instalar las dependencias:
-    ```bash
-    cd backend
-    npm install
-    ```
-2. Inicia el servidor con el siguiente comando:
-    ```bash
-    npm run server
-    ```
+---
+Ejecuta ambos componentes de manera local. Una vez ejecutado, el componente de back-end debería mostrar un mensaje de conexión exitosa a la base de datos de MongoDB, seguido de una lista de las colecciones presentes en la misma. Por otro lado, el componente de front-end mostrará un mensaje de éxito, acompañado de un enlace que te llevará a la página principal. En esta página principal, encontrarás un buscador donde podrás ingresar los valores 'trabajo', 'empresa' o 'idioma', dependiendo de la colección de datos que desees visualizar.

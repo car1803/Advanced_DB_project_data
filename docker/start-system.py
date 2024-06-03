@@ -47,5 +47,5 @@ if __name__ == "__main__":
         print("Iniciando docker-compose...")
         subprocess.run(["docker-compose", "up", "-d"])
         print("Esperando 20 segundos para iniciar los servicios...")
-        time.sleep(20)
+        time.sleep(60)
         main()
