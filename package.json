@@ -2,14 +2,16 @@
     "name": "advanced-db-project-data",
     "version": "1.0.0",
     "scripts": {
-      "start-system": "python ./docker/start-system.py docker/docker-compose-ri-only.yaml",
-      "start-frontend": "npm run start --prefix frontend",
-      "start-backend": "npm run server --prefix backend",
-      "start": "concurrently --names \"DOCKER,FRONTEND,BACKEND\" --prefix \"[{name}]\" \"npm run start-system\" \"npm run start-frontend\" \"npm run start-backend\"",
-      "stop-ri-only": "docker-compose -f docker/docker-compose-ri-only.yaml down",
-      "stop-all": "docker-compose -f docker/docker-compose.yaml down"
+        "start-system": "python ./docker/start-system.py docker/docker-compose-ri-only.yaml",
+        "start-system-full": "python ./docker/start-system.py docker/docker-compose.yaml",
+        "start-frontend": "npm run start --prefix frontend",
+        "start-backend": "npm run server --prefix backend",
+        "start": "concurrently --names \"DOCKER,FRONTEND,BACKEND\" --prefix \"[{name}]\" \"npm run start-system\" \"npm run start-frontend\" \"npm run start-backend\"",
+        "start-full": "concurrently --names \"DOCKER,FRONTEND,BACKEND\" --prefix \"[{name}]\" \"npm run start-system-full\" \"npm run start-frontend\" \"npm run start-backend\"",
+        "stop-ri-only": "docker-compose -f docker/docker-compose-ri-only.yaml down",
+        "stop-all": "docker-compose -f docker/docker-compose.yaml down"
     },
     "devDependencies": {
-      "concurrently": "^7.0.0"
+        "concurrently": "^7.0.0"
     }
-  }
+}
