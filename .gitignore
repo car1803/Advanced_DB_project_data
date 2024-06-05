@@ -10,3 +10,5 @@ prueba.py
 /datos/postgresql/__pycache__/
 /connectors/postgresql/__pycache__/
 !/docker/metabase.db/
+/node_modules/
+package-lock.json

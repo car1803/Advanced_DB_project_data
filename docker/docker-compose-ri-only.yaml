@@ -1,0 +1,83 @@
+services:
+  
+   # Servidor de configuración
+  configsvr:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: configsvr
+    volumes:
+      - "./configsvr-data:/data/db"
+      - "./configsvr-data-db:/data/configdb"
+    command: mongod --replSet rs-config-server --configsvr --port 27017
+    networks:
+      - egresados-network
+
+  # Shard1
+  shard1a:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard1a
+    volumes:
+      - "./shard1a-data:/data/db"
+    command: mongod --shardsvr --replSet shard1
+    networks:
+      - egresados-network
+
+  shard1b:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard1b
+    volumes:
+      - "./shard1b-data:/data/db"
+    command: mongod --shardsvr --replSet shard1 
+    networks:
+      - egresados-network
+
+  # Shard2
+  shard2a:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard2a
+    volumes:
+      - "./shard2a-data:/data/db"
+    command: mongod --shardsvr --replSet shard2
+    networks:
+      - egresados-network
+
+  shard2b:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    hostname: shard2b
+    volumes:
+      - "./shard2b-data:/data/db"
+    command: mongod --shardsvr --replSet shard2
+    networks:
+      - egresados-network
+
+  # Mongos
+  mongos:
+    image:  mongo:6.0.1
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./mongos-data:/data/db"
+    command: mongos --configdb rs-config-server/configsvr:27017 --port 27017 --bind_ip_all
+    depends_on:
+      - configsvr
+    networks:
+      - egresados-network
+      
+  # Metabase
+  metabase: 
+    image: metabase/metabase
+    ports:
+      - "3300:3000"
+    volumes:
+      - ./metabase.db:/metabase.db
+    networks:
+      - egresados-network
+
+networks:
+  egresados-network:
+    name: egresados-network

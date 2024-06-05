@@ -149,5 +149,17 @@ primero debes instalar [Node.js](https://nodejs.org/en/blog/release/v18.20.2).
 
 Para obtener más información, consulta el archivo README dentro de la carpeta `frontend`.
 
+# Ejecutar todo
+
+Se incluye un archivo _package.json_ con el que se pueden ejecutar todos los componentes de un solo comando, para ello en la ruta base del proyecto ejecute:
+
+```bash
+npm i
+npm run start
+```
+
+Al detener el script se detendran las instancias de node pero los contenedores de docker no, para detener los contenedores de docker ejecutar ```npm run stop-ri-only``` o ```npm run stop-all```
+
+
 ---
 Ejecuta ambos componentes de manera local. Una vez ejecutado, el componente de back-end debería mostrar un mensaje de conexión exitosa a la base de datos de MongoDB, seguido de una lista de las colecciones presentes en la misma. Por otro lado, el componente de front-end mostrará un mensaje de éxito, acompañado de un enlace que te llevará a la página principal. En esta página principal, encontrarás un buscador donde podrás ingresar los valores 'trabajo', 'empresa' o 'idioma', dependiendo de la colección de datos que desees visualizar.

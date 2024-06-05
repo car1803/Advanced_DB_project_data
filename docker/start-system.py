@@ -1,6 +1,7 @@
 import subprocess
 import time
 import os
+import sys
 
 
 data_server_config = "configsvr-data"
@@ -37,15 +38,24 @@ def main():
 
 
 if __name__ == "__main__":
+
+    fileDockerCompose = "docker-compose.yaml"
+
+    if len(sys.argv) >= 2:
+        param1 = sys.argv[1]
+        if param1 != None:
+            fileDockerCompose = param1
+    
+    print(f"Usando archivo de docker-compose: {fileDockerCompose}")
     ruta_actual = os.getcwd()
     ruta_completa = os.path.join(ruta_actual, data_server_config)
     if os.path.exists(ruta_completa) and os.path.isdir(ruta_completa):
         print("Iniciando docker-compose...")
-        subprocess.run(["docker-compose", "up", "-d"])
+        subprocess.run(["docker-compose","-f", fileDockerCompose, "up", "-d"])
         print(f"Ya se ha creado la carpeta de datos de configsrv no es necesario correr la migración.")
     else:
         print("Iniciando docker-compose...")
-        subprocess.run(["docker-compose", "up", "-d"])
+        subprocess.run(["docker-compose","-f", fileDockerCompose, "up", "-d"])
         print("Esperando 20 segundos para iniciar los servicios...")
         time.sleep(60)
         main()
