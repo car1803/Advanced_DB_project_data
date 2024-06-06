@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 import glovars  from '../glovars';
+import Select from 'react-select';
 
 const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
     const [searchTerm, setSearchTerm]  = useState('');
@@ -57,11 +58,14 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Select  
-                            onChange={(e) => {if(e.target.value !== defaultSelectValue) return setCollectionSelectedDummy(e.target.value)}} className='mb-3 m-1'>
-                            {data && data.map((item, index) => ( <option key={index} value={item}>{item}</option> ))}
-                        </Form.Select>
+                        <Select
+                            options={data && data.map((item, index) => ( { value: item, label: item }))}
+                            onChange={(e) => setCollectionSelectedDummy(e.value)}
+                            placeholder="Buscar y seleccionar..."
+                            />
                     </Form.Group>
+
+                    
                     
                     <Button variant="primary" type="submit">Buscar</Button>
                 </Form>
