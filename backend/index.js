@@ -48,7 +48,15 @@ app.get('/:collectionName', async (req, res) => {
   try {
     const db = mongoose.connection.db;
     const collection = db.collection(collectionName);
-    const documents = await collection.find({}).limit(5).toArray();
+    var documents = {};
+
+    //Verificar si la colección empieza por h
+    if (collectionName.startsWith('h')) {
+      documents = await collection.find({}, { projection: { _id: 0 } }).limit(100).toArray();
+    } else {
+      documents = await collection.find({}, {}).limit(100).toArray();
+    }
+    
     res.json(documents);
   } catch (err) {
     res.status(500).send('Error retrieving documents: ' + err.message);

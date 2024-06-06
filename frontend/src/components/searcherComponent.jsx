@@ -10,7 +10,6 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
     const [collectionSelected, setCollectionSelected] = useState(null);
     const [collectionSelectedDummy, setCollectionSelectedDummy] = useState(null);
     const [showTable, setShowTable] = useState(false);
-    const [ defaultSelectValue ] = useState('--Selecciona una colección--');
     const [ showModal, setShowModal ] = useState(false);
     const [ modalData ] = useState({ title: 'Error', description: 'Por favor, selecciona una colección y escribe un término de búsqueda' });
 
@@ -19,17 +18,16 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
         setData(midata);
         
         axios.get(`${glovars.backendUrl}/getCollections`).then((response) => {
-            response.data.unshift(defaultSelectValue);
             setData(response.data);
         }).catch((error) => {
             console.error('Error fetching data:', error.message);
         });
 
         setShowTable(false);
-      }, [defaultSelectValue]); 
+      }, []); 
 
     const handleSearch = (e) => {
-        if (!searchTerm || !collectionSelectedDummy || collectionSelectedDummy === defaultSelectValue) {
+        if (!searchTerm || !collectionSelectedDummy) {
             setShowModal(true);
             setShowTable(false);
             e.preventDefault();
@@ -61,18 +59,16 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
                         <Select
                             options={data && data.map((item, index) => ( { value: item, label: item }))}
                             onChange={(e) => setCollectionSelectedDummy(e.value)}
-                            placeholder="Buscar y seleccionar..."
+                            placeholder="--Selecciona una colección--"
                             />
                     </Form.Group>
 
-                    
-                    
                     <Button variant="primary" type="submit">Buscar</Button>
                 </Form>
             </Row>
             { showTable && 
                 <Row>
-                    <DataTableComponent collectionName = { collectionSelected } />
+                    <DataTableComponent collectionName = { collectionSelected } ModalComponent={ ModalComponent } itemsPerPage={10} />
                 </Row>
             }
 

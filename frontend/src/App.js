@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App d-flex flex-column min-vh-100">
+    <div className="App d-flex flex-column min-vh-100 min-vw-100">
     <Router>
         <Header />
         <div className="flex-grow-1">
