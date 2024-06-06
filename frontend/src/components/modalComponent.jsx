@@ -13,7 +13,7 @@ const ModalComponent = ({ title, description, show, setShowModal }) => {
                 </Modal.Header>
                 <Modal.Body>{description}</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleClose}>
                         Close
                     </Button>
                 </Modal.Footer>

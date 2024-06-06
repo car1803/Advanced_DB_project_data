@@ -7,8 +7,9 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
     const [searchTerm, setSearchTerm]  = useState('');
     const [data, setData] = useState(null);
     const [collectionSelected, setCollectionSelected] = useState(null);
+    const [collectionSelectedDummy, setCollectionSelectedDummy] = useState(null);
     const [showTable, setShowTable] = useState(false);
-
+    const [ defaultSelectValue ] = useState('--Selecciona una colección--');
     const [ showModal, setShowModal ] = useState(false);
     const [ modalData ] = useState({ title: 'Error', description: 'Por favor, selecciona una colección y escribe un término de búsqueda' });
 
@@ -17,27 +18,27 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
         setData(midata);
         
         axios.get(`${glovars.backendUrl}/getCollections`).then((response) => {
-            response.data.unshift('--Selecciona una colección--');
+            response.data.unshift(defaultSelectValue);
             setData(response.data);
         }).catch((error) => {
             console.error('Error fetching data:', error.message);
         });
 
         setShowTable(false);
-      }, []); 
+      }, [defaultSelectValue]); 
 
     const handleSearch = (e) => {
-        if (!searchTerm || !collectionSelected || collectionSelected === '--Selecciona una colección--') {
+        if (!searchTerm || !collectionSelectedDummy || collectionSelectedDummy === defaultSelectValue) {
             setShowModal(true);
             setShowTable(false);
             e.preventDefault();
             return;
         }
+        setCollectionSelected(collectionSelectedDummy);
         setShowTable(true);
         e.preventDefault();
         console.log('Search term:', searchTerm);
-        console.log('Collection selected:', collectionSelected);
-        
+        console.log('Collection selected:', collectionSelectedDummy);
     };
 
     return (
@@ -57,7 +58,7 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
 
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                         <Form.Select  
-                            onChange={(e) => setCollectionSelected(e.target.value)} className='mb-3 m-1'>
+                            onChange={(e) => {if(e.target.value !== defaultSelectValue) return setCollectionSelectedDummy(e.target.value)}} className='mb-3 m-1'>
                             {data && data.map((item, index) => ( <option key={index} value={item}>{item}</option> ))}
                         </Form.Select>
                     </Form.Group>
