@@ -27,7 +27,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, ModalComponent }) =>
     };
 
     fetchData();
-  }, [collectionName]);
+  }, [collectionName, currentPage]);
 
   useEffect(() => {
     let resposeData = data.filter(item =>
@@ -76,7 +76,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, ModalComponent }) =>
       <Table striped bordered hover>
         <thead>
           <tr>
-            {data.length > 0 && Object.keys(data[1]).map((key) => (
+            {data && data.length > 0 && Object.keys(data[0]).map((key) => (
               <th className='text-capitalize text-center text-white bg-dark' key={key}>{key}</th>
             ))}
           </tr>
@@ -85,7 +85,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, ModalComponent }) =>
           {displayedData.map((item, index) => (
             <tr key={index}>
               {Object.values(item).map((val, i) => (
-                <td key={i}> { isObject(val) ? <Button onClick={() => { setModalData({ title:  Object.keys(data[1])[i] , description: JSON.stringify(val) }); setShowModal(true); }}>Ver</Button> : val }</td>
+                <td key={i}> { isObject(val) ? <Button onClick={() => { setModalData({ title:  Object.keys(data[0])[i] , description: JSON.stringify(val) }); setShowModal(true); }}>Ver</Button> : val }</td>
               ))}
             </tr>
           ))}
