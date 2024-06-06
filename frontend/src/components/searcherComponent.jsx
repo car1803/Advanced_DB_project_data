@@ -1,40 +1,50 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { Button, Container, Form, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import glovars  from '../glovars';
 
-const SearcherComponent = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate();
+const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
+    const [searchTerm, setSearchTerm]  = useState('');
+    const [data, setData] = useState(null);
+    const [collectionSelected, setCollectionSelected] = useState(null);
+    const [showTable, setShowTable] = useState(false);
+
+    const [ showModal, setShowModal ] = useState(false);
+    const [ modalData ] = useState({ title: 'Error', description: 'Por favor, selecciona una colección y escribe un término de búsqueda' });
+
+    useEffect(() => {
+        let midata = ["Cargando..."];
+        setData(midata);
+        
+        axios.get(`${glovars.backendUrl}/getCollections`).then((response) => {
+            response.data.unshift('--Selecciona una colección--');
+            setData(response.data);
+        }).catch((error) => {
+            console.error('Error fetching data:', error.message);
+        });
+
+        setShowTable(false);
+      }, []); 
 
     const handleSearch = (e) => {
-        e.preventDefault();
-        let collectionName = '';
-
-        // Determinar collectionName según el término de búsqueda ingresado
-        switch (searchTerm.toLowerCase()) {
-            case 'trabajo':
-                collectionName = 'hregistrotrabajo';
-                break;
-            case 'empresa':
-                collectionName = 'hregistroempresa';
-                break;
-            case 'idioma':
-                collectionName = 'hregistroestudioidioma';
-                break;
-            default:
-                console.error('Invalid search term');
-                return;
+        if (!searchTerm || !collectionSelected || collectionSelected === '--Selecciona una colección--') {
+            setShowModal(true);
+            setShowTable(false);
+            e.preventDefault();
+            return;
         }
-
-        // Redirigir a la página de la tabla con el collectionName correspondiente
-        navigate(`/data-table/${collectionName}`);
+        setShowTable(true);
+        e.preventDefault();
+        console.log('Search term:', searchTerm);
+        console.log('Collection selected:', collectionSelected);
+        
     };
 
     return (
-        <Container className='text-start'>
+        <Container className ='text-start'>
             <Row>
                 <h1 className='m-4'>Buscador:</h1>
-                <Form className='border p-4 rounded' onSubmit={handleSearch}>
+                <Form className='border p-4 rounded is-invalid' onSubmit={handleSearch}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Buscar:</Form.Label>
                         <Form.Control
@@ -44,9 +54,24 @@ const SearcherComponent = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Select  
+                            onChange={(e) => setCollectionSelected(e.target.value)} className='mb-3 m-1'>
+                            {data && data.map((item, index) => ( <option key={index} value={item}>{item}</option> ))}
+                        </Form.Select>
+                    </Form.Group>
+                    
                     <Button variant="primary" type="submit">Buscar</Button>
                 </Form>
             </Row>
+            { showTable && 
+                <Row>
+                    <DataTableComponent collectionName = { collectionSelected } />
+                </Row>
+            }
+
+            <ModalComponent setShowModal={setShowModal} show = {showModal} title = { modalData.title } description = { modalData.description } />
         </Container>
     );
 };

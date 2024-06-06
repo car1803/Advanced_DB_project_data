@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useParams } from 'react-router-dom';
 
-const DataTableComponent = () => {
+const DataTableComponent = ({ collectionName }) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const { collectionName } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {

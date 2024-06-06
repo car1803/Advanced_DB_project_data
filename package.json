@@ -9,7 +9,8 @@
         "start": "concurrently --names \"DOCKER,FRONTEND,BACKEND\" --prefix \"[{name}]\" \"npm run start-system\" \"npm run start-frontend\" \"npm run start-backend\"",
         "start-full": "concurrently --names \"DOCKER,FRONTEND,BACKEND\" --prefix \"[{name}]\" \"npm run start-system-full\" \"npm run start-frontend\" \"npm run start-backend\"",
         "stop-ri-only": "docker-compose -f docker/docker-compose-ri-only.yaml down",
-        "stop-all": "docker-compose -f docker/docker-compose.yaml down"
+        "stop-all": "docker-compose -f docker/docker-compose.yaml down",
+        "npm-i": "npm install --prefix frontend && npm install --prefix backend"
     },
     "devDependencies": {
         "concurrently": "^7.0.0"
