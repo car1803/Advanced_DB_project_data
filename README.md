@@ -4,6 +4,7 @@
 ```pip install faker ```
 ```pip install psycopg2-binary```
 ```pip install pymongo```
+```pip install python-dotenv```
 
 
 o simplemente
@@ -104,18 +105,18 @@ db.<nombre_coleccion>.getShardDistribution()
 ### Ejecutar los mapreducers
 Ingresar a la carpeta de cada colección de hechos en src/datos/mapreducers/x y ejecutar 
 ```
-python3 mapreducers.py
+python mapreducers.py
 ```
 Verificar en mongo compass las colecciones creadas.
 
 otra forma es en la ruta base del proyecto ejecutar el comando:
 
 ```
-python3 runallmapreducers.py
+python runallmapreducers.py
 ```
 
 ### Metabase
-Ingresar a localhost:3000, loguearse y conectar la base de datos mongo (mongodb://docker-mongos-1:27017/egresados)
+Ingresar a localhost:3300, loguearse y conectar la base de datos mongo (mongodb://docker-mongos-1:27017/egresados)
 
 ### Bajar los contenedores
 ```
