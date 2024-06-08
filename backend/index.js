@@ -34,34 +34,58 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Ruta para obtener los primeros 5 documentos de una colección específica
 app.get('/:collectionName', async (req, res) => {
   const { collectionName } = req.params;
+  const { query } = req.query;
   const db = mongoose.connection.db;
   const validCollections = await db.listCollections().toArray();
   const collectionNames = validCollections.map(col => col.name);
-
   if (!collectionNames.includes(collectionName)) {
     return res.status(400).send('Invalid collection name');
   }
-
   try {
-    const db = mongoose.connection.db;
     const collection = db.collection(collectionName);
-    var documents = {};
-
-    //Verificar si la colección empieza por h
+    let documents = [];
     if (collectionName.startsWith('h')) {
-      documents = await collection.find({}, { projection: { _id: 0 } }).limit(100).toArray();
+      if (query) {
+        documents = await collection.find(
+          { $text: { $search: query } },
+          { projection: { _id: 0, score: { $meta: "textScore" } } }
+        ).sort({ score: { $meta: "textScore" } }).limit(100).toArray();
+        if (documents.length === 0) {
+          const regexQuery = new RegExp(query, 'i');
+          documents = await collection.find(
+            {
+              $or: [
+                { "cargo": regexQuery },
+                { "nombre": regexQuery },
+                { "descripcion": regexQuery },
+                { "destudiante.nombre": regexQuery },
+                { "destudiante.documento": regexQuery },
+                { "dempresa.descripcion": regexQuery },
+                { "dempresa.nombre": regexQuery },
+                { "dtrabajoestudiantecarreras.nombrefacultad": regexQuery }, 
+                { "destudianteidiomacarreras.nombrefacultad": regexQuery }, 
+                { "dempresacarreras.nombrefacultad": regexQuery }, 
+                { "destudianteidiomacarreras.nombresede": regexQuery }, 
+                { "dempresacarreras.nombresede": regexQuery }, 
+              ]
+            },
+            { projection: { _id: 0 } }
+          ).limit(100).toArray();
+        }
+      } else {
+        documents = await collection.find({}, { projection: { _id: 0 } }).limit(100).toArray();
+      }
     } else {
-      documents = await collection.find({}, {}).limit(100).toArray();
+      documents = await collection.find({}).limit(100).toArray();
     }
-    
     res.json(documents);
   } catch (err) {
     res.status(500).send('Error retrieving documents: ' + err.message);
   }
 });
+
 
 // Iniciar el servidor solo después de la conexión exitosa a MongoDB
 app.listen(PORT, () => {

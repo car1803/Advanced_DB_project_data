@@ -16,9 +16,6 @@ const ModalComponent = ({ title, description, show, setShowModal }) => {
         return true;
     };
 
-    console.log(description, isJSON(description));
-    if (isJSON(description)) console.log(JSON.parse(description));
-
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

@@ -7,11 +7,11 @@ function isObject(value) {
   return value !== null && typeof value === 'object';
 }
 
-const DataTableComponent = ({ collectionName, itemsPerPage, ModalComponent }) => {
+const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalComponent }) => {
+  const [, setSearchTerm] = useState('');
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [modalData, setModalData] = useState({ title: '', description: '' });
   const [showModal, setShowModal] = useState(false);
@@ -19,7 +19,10 @@ const DataTableComponent = ({ collectionName, itemsPerPage, ModalComponent }) =>
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/${collectionName}`);
+        const response = await axios.get(`http://localhost:5000/${collectionName}`, {
+          params: { query: searchTerm }
+        });
+        console.log(response.data, 'response', collectionName, searchTerm);
         setData(response.data);
       } catch (error) {
         setError(error.message);
@@ -27,21 +30,11 @@ const DataTableComponent = ({ collectionName, itemsPerPage, ModalComponent }) =>
     };
 
     fetchData();
-  }, [collectionName, currentPage]);
+  }, [collectionName, searchTerm, currentPage]);
 
   useEffect(() => {
-    let resposeData = data.filter(item =>
-      Object.values(item).some(
-        val =>
-          val
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerm.toLowerCase()) !== -1
-      )
-    );
-    
-    setFilteredData(resposeData);
-  }, [searchTerm, data]);
+    setFilteredData(data);
+  }, [data]);
 
   if (error) {
     return <div>Error: {error}</div>;

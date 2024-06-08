@@ -27,17 +27,22 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
     }, []);
 
     const handleSearch = (e) => {
-        if (!searchTerm || !collectionSelectedDummy) {
+        e.preventDefault();
+        if (!collectionSelectedDummy) {
             setShowModal(true);
             setShowTable(false);
-            e.preventDefault();
             return;
         }
+        if (collectionSelectedDummy.startsWith('h') && !searchTerm) {
+            setShowModal(true);
+            setShowTable(false);
+            return;
+        }
+        
+        const effectiveSearchTerm = collectionSelectedDummy.startsWith('h') ? searchTerm : '-';
+        setSearchTerm(effectiveSearchTerm);
         setCollectionSelected(collectionSelectedDummy);
         setShowTable(true);
-        e.preventDefault();
-        console.log('Search term:', searchTerm);
-        console.log('Collection selected:', collectionSelectedDummy);
     };
 
     const groupedOptions = data && [
@@ -56,16 +61,6 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
             <Row>
                 <h1 className='m-4'>Buscador:</h1>
                 <Form className='border p-4 rounded is-invalid' onSubmit={handleSearch}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Buscar:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Escribe aquí lo que deseas buscar"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </Form.Group>
-
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                         <Select
                             options={groupedOptions}
@@ -73,13 +68,23 @@ const SearcherComponent = ({ DataTableComponent, ModalComponent }) => {
                             placeholder="--Selecciona una colección--"
                         />
                     </Form.Group>
-
+                    {collectionSelectedDummy && collectionSelectedDummy.startsWith('h') && (
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Buscar:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Escribe aquí lo que deseas buscar"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </Form.Group>
+                    )}
                     <Button variant="primary" type="submit">Buscar</Button>
                 </Form>
             </Row>
             {showTable &&
                 <Row>
-                    <DataTableComponent collectionName={collectionSelected} ModalComponent={ModalComponent} itemsPerPage={10} />
+                    <DataTableComponent collectionName={collectionSelected} searchTerm={searchTerm} ModalComponent={ModalComponent} itemsPerPage={10} />
                 </Row>
             }
 
