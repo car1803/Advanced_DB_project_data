@@ -7,6 +7,40 @@ function isObject(value) {
   return value !== null && typeof value === 'object';
 }
 
+
+function tooLong(text, maxLength) {
+  text = text.toString();
+  return text.length > maxLength;
+
+}
+
+function spamConNegrillaEnPalabras(texto, palabras) {
+  texto = texto.toString();
+  
+  let palabrasValidas = [];
+
+  for (var i = 0; i < palabras.length; i++) {
+    //verificar si la palabra contiene caracteres especiales usados para el regex y eliminarlos
+    let palabra = palabras[i];
+    palabra = palabra.replace(/[*+.\s$-]/g, '');
+    if (palabra.length > 0){
+      palabrasValidas.push(palabra);
+    }
+  }
+  
+  palabras = palabrasValidas;	
+
+
+  for (var j = 0; j < palabras.length; j++) {
+    let palabra = palabras[j];
+    //TODO: Reemplazar sin regex es decir ignorando punto y asteristo
+    texto = texto.replace(new RegExp(palabra, "gi"), "<spam style = 'font-weight: bold; color: red;'>" + palabra + "</spam>");
+    
+  }
+
+  return <span dangerouslySetInnerHTML={{ __html: texto }} />;
+}
+
 const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalComponent }) => {
   const [, setSearchTerm] = useState('');
   const [data, setData] = useState([]);
@@ -22,7 +56,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
         const response = await axios.get(`http://localhost:5000/${collectionName}`, {
           params: { query: searchTerm }
         });
-        console.log(response.data, 'response', collectionName, searchTerm);
+        //console.log(response.data, 'response', collectionName, searchTerm);
         setData(response.data);
       } catch (error) {
         setError(error.message);
@@ -37,7 +71,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
   }, [data]);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    console.log(error);
   }
 
   if (data.length === 0) {
@@ -66,24 +100,39 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
         />
       </InputGroup>
       <ModalComponent title={modalData.title} description={modalData.description} show={showModal} setShowModal={setShowModal} />
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            {data && data.length > 0 && Object.keys(data[0]).map((key) => (
-              <th className='text-capitalize text-center text-white bg-dark' key={key}>{key}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {displayedData.map((item, index) => (
-            <tr key={index}>
-              {Object.values(item).map((val, i) => (
-                <td key={i}> { isObject(val) ? <Button onClick={() => { setModalData({ title:  Object.keys(data[0])[i] , description: JSON.stringify(val) }); setShowModal(true); }}>Ver</Button> : val }</td>
+      <div style={{ "overflow-x": "auto", "border": "2px solid #ccc"}}>
+        <Table style={{ 
+              "white-space": "nowrap"}} striped bordered hover>
+          <thead>
+            <tr>
+              {data && data.length > 0 && Object.keys(data[0]).map((key) => (
+                <th className='text-capitalize text-center text-white bg-dark' key={key}>{key}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {displayedData.map((item, index) => (
+              <tr key={index}>
+                {Object.values(item).map((val, i) => (
+                  <td key={i}> {
+                    isObject(val) ?
+                      <Button
+                        onClick={() => { setModalData({ title: Object.keys(data[0])[i], description: JSON.stringify(val) }); setShowModal(true); }}>Ver lista
+                      </Button> 
+                    : 
+                      tooLong(val, 50) ? 
+                        <a href='/#' onClick={() => { setModalData({ title: Object.keys(data[0])[i], description:  spamConNegrillaEnPalabras(val, searchTerm.split(' ')) }); setShowModal(true); }}>Ver...
+                        </a> 
+                      : 
+                        spamConNegrillaEnPalabras(val, searchTerm.split(' '))
+                    }
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       <Pagination>
         {[...Array(totalPages).keys()].map((page) => (
           <Pagination.Item
