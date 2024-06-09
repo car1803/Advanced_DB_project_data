@@ -1,41 +1,35 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Pagination, FormControl, InputGroup, Button } from 'react-bootstrap';
+import { Table, Pagination, FormControl, InputGroup, Button, Alert } from 'react-bootstrap';
 
 function isObject(value) {
   return value !== null && typeof value === 'object';
 }
 
-
 function tooLong(text, maxLength) {
   text = text.toString();
   return text.length > maxLength;
-
 }
 
 function spamConNegrillaEnPalabras(texto, palabras) {
   texto = texto.toString();
-  
+
   let palabrasValidas = [];
 
   for (var i = 0; i < palabras.length; i++) {
-    //verificar si la palabra contiene caracteres especiales usados para el regex y eliminarlos
     let palabra = palabras[i];
     palabra = palabra.replace(/[*+.\s$-]/g, '');
-    if (palabra.length > 0){
+    if (palabra.length > 0) {
       palabrasValidas.push(palabra);
     }
   }
-  
-  palabras = palabrasValidas;	
 
+  palabras = palabrasValidas;
 
   for (var j = 0; j < palabras.length; j++) {
     let palabra = palabras[j];
-    //TODO: Reemplazar sin regex es decir ignorando punto y asteristo
     texto = texto.replace(new RegExp(palabra, "gi"), "<spam style = 'font-weight: bold; color: red;'>" + palabra + "</spam>");
-    
   }
 
   return <span dangerouslySetInnerHTML={{ __html: texto }} />;
@@ -49,6 +43,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
   const [filteredData, setFilteredData] = useState([]);
   const [modalData, setModalData] = useState({ title: '', description: '' });
   const [showModal, setShowModal] = useState(false);
+  const [queryTime, setQueryTime] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,8 +51,8 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
         const response = await axios.get(`http://localhost:5000/${collectionName}`, {
           params: { query: searchTerm }
         });
-        //console.log(response.data, 'response', collectionName, searchTerm);
-        setData(response.data);
+        setData(response.data.documents);
+        setQueryTime(response.data.queryTime);
       } catch (error) {
         setError(error.message);
       }
@@ -71,7 +66,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
   }, [data]);
 
   if (error) {
-    console.log(error);
+    return <div>Error: {error}</div>;
   }
 
   if (data.length === 0) {
@@ -101,8 +96,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
       </InputGroup>
       <ModalComponent title={modalData.title} description={modalData.description} show={showModal} setShowModal={setShowModal} />
       <div style={{ "overflow-x": "auto", "border": "2px solid #ccc"}}>
-        <Table style={{ 
-              "white-space": "nowrap"}} striped bordered hover>
+        <Table style={{ "white-space": "nowrap" }} striped bordered hover>
           <thead>
             <tr>
               {data && data.length > 0 && Object.keys(data[0]).map((key) => (
@@ -118,12 +112,12 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
                     isObject(val) ?
                       <Button
                         onClick={() => { setModalData({ title: Object.keys(data[0])[i], description: JSON.stringify(val) }); setShowModal(true); }}>Ver lista
-                      </Button> 
-                    : 
-                      tooLong(val, 50) ? 
-                        <a href='/#' onClick={() => { setModalData({ title: Object.keys(data[0])[i], description:  spamConNegrillaEnPalabras(val, searchTerm.split(' ')) }); setShowModal(true); }}>Ver...
-                        </a> 
-                      : 
+                      </Button>
+                    :
+                      tooLong(val, 50) ?
+                        <a href='/#' onClick={() => { setModalData({ title: Object.keys(data[0])[i], description: spamConNegrillaEnPalabras(val, searchTerm.split(' ')) }); setShowModal(true); }}>Ver...
+                        </a>
+                      :
                         spamConNegrillaEnPalabras(val, searchTerm.split(' '))
                     }
                   </td>
@@ -144,6 +138,9 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
           </Pagination.Item>
         ))}
       </Pagination>
+      <Alert variant="info">
+        Tiempo de consulta: {queryTime} ms
+      </Alert>
     </div>
   );
 };

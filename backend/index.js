@@ -46,6 +46,7 @@ app.get('/:collectionName', async (req, res) => {
   try {
     const collection = db.collection(collectionName);
     let documents = [];
+    const start = process.hrtime();
     if (collectionName.startsWith('h')) {
       if (query) {
         documents = await collection.find(
@@ -80,7 +81,9 @@ app.get('/:collectionName', async (req, res) => {
     } else {
       documents = await collection.find({}).limit(100).toArray();
     }
-    res.json(documents);
+    const [seconds, nanoseconds] = process.hrtime(start);
+    const queryTime = (seconds * 1000 + nanoseconds / 1e6).toFixed(3); // Convert to milliseconds and round to 3 decimal places
+    res.json({ queryTime, documents });
   } catch (err) {
     res.status(500).send('Error retrieving documents: ' + err.message);
   }
