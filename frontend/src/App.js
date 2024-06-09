@@ -16,7 +16,7 @@ function App() {
         <div className="flex-grow-1">
           <Routes>
             <Route path="/" element={<SearcherComponent ModalComponent = { ModalComponent } DataTableComponent = { DataTableComponent } />} />
-            <Route path="/metabase" element={<MetabaseComponent />} />
+            <Route path="/metabase" element={<MetabaseComponent src={"http://localhost:3300/public/dashboard/df605c0e-186f-4b34-828f-7d350fe6e801"} onlyIframe={false} />} />
           </Routes>
         </div>
         <Footer />
