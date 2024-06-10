@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
 const Header = () => {
   return (
@@ -11,6 +11,7 @@ const Header = () => {
           <Nav className="me-auto">
             <Nav.Link href="/">Busqueda</Nav.Link>
             <Nav.Link href="/metabase">Metabase</Nav.Link>
+            <Nav.Link href="http://localhost:3300/"><Button className='btn-light' style={{ padding: "2px 5px" }}>Gestionar Metabase</Button></Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
