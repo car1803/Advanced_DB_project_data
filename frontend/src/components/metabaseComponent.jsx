@@ -1,13 +1,7 @@
 import React from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { useEffect } from 'react';
 
 const MetabaseComponent = ({ src, onlyIframe }) => {
-    useEffect(() => {
-        console.log('MetabaseComponent mounted');
-    }, []);
-
-    console.log(src, onlyIframe)
 
     if (!src) {
         return null;

@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Pagination, FormControl, InputGroup, Button, Alert } from 'react-bootstrap';
+import { Table, Pagination, FormControl, InputGroup, Alert } from 'react-bootstrap';
 import MetabaseComponent from './metabaseComponent';
 
 function isObject(value) {
@@ -9,12 +9,12 @@ function isObject(value) {
 }
 
 function tooLong(text, maxLength) {
-  text = text.toString();
+  text =  text ? text.toString() : "";
   return text.length > maxLength;
 }
 
 function spamConNegrillaEnPalabras(texto, palabras) {
-  texto = texto.toString();
+  texto = texto ? texto.toString() : "";  
 
   let palabrasValidas = [];
 
@@ -34,6 +34,23 @@ function spamConNegrillaEnPalabras(texto, palabras) {
   }
 
   return <span dangerouslySetInnerHTML={{ __html: texto }} />;
+}
+
+function textoContienePalabras(texto, palabras) {
+  texto = texto ? texto.toString() : "";  
+
+  
+  if(!texto || !palabras[0]) return false;
+
+  
+  for (var j = 0; j < palabras.length; j++) {
+    let palabra = palabras[j];
+    if (texto.toLowerCase().includes(palabra.toLowerCase())) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalComponent }) => {
@@ -97,11 +114,58 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
     "cantidad_estudiantes_por_idioma":"http://localhost:3300/public/question/3a9c7750-1704-4197-a043-7ebfa98fcbb6",
   }
 
+  const hregistrotrabajo = ["id",	"añosexperienciaprevia",	"cargo",	"fechafinid",	"fechainicioid",	"ofertasie",	"orden",	"salariopromedio",	"destudiante",	"dtiempo",	"dtrabajoestudiantecarreras",	"dempresa",	"score"];
+  const hregistroempresa = ["id",	"correo",	"descripcion",	"gastoensalariostotal",	"nombre",	"numerodeempleadosactual",	"numerodeempleadostotal",	"sectorid",	"tipoempresaid",	"web",	"dempresacarreras",	"dsector",	"stipoempresa",	"score"];
+  const hregistroestudioidioma = ["id",	"destudiante",	"destudianteidiomacarreras",	"destudianteidiomaempresas",	"didioma",	"didiomanivel",	"score"];
+  const headers = {
+    "hregistrotrabajo": hregistrotrabajo,
+    "hregistroempresa": hregistroempresa,
+    "hregistroestudioidioma": hregistroestudioidioma
+  }
+
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const displayedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const stylefound = {
+    "backgroundColor": "beige"
+  };
+
+  const styledefault = {
+    "backgroundColor": "white"
+  };
+
+  function eslitoEncontrado(mival) {
+    return (textoContienePalabras(JSON.stringify(mival), searchTerm.split(' ')) ? stylefound : styledefault);
+  }
+  
+  function generarTableFila(keysObject, objetofila, searchTerm){
+    var rows = [];
+
+    for (var i = 0; i < keysObject.length; i++) {
+      let currkey = keysObject[i];
+      let value = objetofila[currkey];
+      if (isObject(value)) {
+        rows.push(<td key={i} style={eslitoEncontrado(value)}>
+                    <a href='/#' onClick={() => { setModalData({ title: currkey, description: JSON.stringify(value), searchTerm: searchTerm }); setShowModal(true); }}>ver...</a>
+                  </td>);
+      } else {
+        if (tooLong(value, 50)) {
+            rows.push(<td key={i} style={eslitoEncontrado(value)}>
+                        <a href='/#' onClick={() => { setModalData({ title: currkey, description: value, searchTerm: searchTerm }); setShowModal(true);}}>ver...</a>
+                      </td>);
+          }else{
+            rows.push(<td key={i} style={eslitoEncontrado(value)}>
+              {spamConNegrillaEnPalabras(value, searchTerm.split(' '))}
+            </td>);
+        } 
+      }
+    }
+
+    return rows;
+  }
 
   return (
     <div className='mb-3 p-3'>
@@ -114,35 +178,29 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </InputGroup>
-      <ModalComponent title={modalData.title} description={modalData.description} show={showModal} setShowModal={setShowModal} />
+      <ModalComponent title={modalData.title} description={modalData.description} searchTerm={modalData.searchTerm} show={showModal} setShowModal={setShowModal} />
       <MetabaseComponent src={metabaseCollectionsDictionary[collectionName] || null} onlyIframe={true}/>
-      <div style={{ "overflow-x": "auto", "border": "2px solid #ccc"}}>
-        <Table style={{ "white-space": "nowrap" }} striped bordered hover>
+      <div style={{ "overflowX": "auto", "border": "2px solid #ccc"}}>
+        <Table style={{ "whiteSpace": "nowrap" }} striped bordered hover>
           <thead>
             <tr>
-              {data && data.length > 0 && Object.keys(data[0]).map((key) => (
+              {data 
+              && data.length > 0 
+              && headers[collectionName] ? headers[collectionName].map((key) => (
                 <th className='text-capitalize text-center text-white bg-dark' key={key}>{key}</th>
+              ))
+              : true
+              && Object.keys(data[0]).map((key) => (
+                <th className='text-capitalize text-center text-white bg-dark'>{key}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {displayedData.map((item, index) => (
               <tr key={index}>
-                {Object.values(item).map((val, i) => (
-                  <td key={i}> {
-                    isObject(val) ?
-                      <Button
-                        onClick={() => { setModalData({ title: Object.keys(data[0])[i], description: JSON.stringify(val) }); setShowModal(true); }}>Ver lista
-                      </Button>
-                    :
-                      tooLong(val, 50) ?
-                        <a href='/#' onClick={() => { setModalData({ title: Object.keys(data[0])[i], description: spamConNegrillaEnPalabras(val, searchTerm.split(' ')) }); setShowModal(true); }}>Ver...
-                        </a>
-                      :
-                        spamConNegrillaEnPalabras(val, searchTerm.split(' '))
-                    }
-                  </td>
-                ))}
+                {
+                  generarTableFila(headers[collectionName] || Object.keys(data[0]), item, searchTerm)
+                }
               </tr>
             ))}
           </tbody>
