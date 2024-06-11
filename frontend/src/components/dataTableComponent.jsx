@@ -191,7 +191,7 @@ const DataTableComponent = ({ collectionName, itemsPerPage, searchTerm, ModalCom
               ))
               : true
               && Object.keys(data[0]).map((key) => (
-                <th className='text-capitalize text-center text-white bg-dark'>{key}</th>
+                <th className='text-capitalize text-center text-white bg-dark' key={key}>{key}</th>
               ))}
             </tr>
           </thead>
